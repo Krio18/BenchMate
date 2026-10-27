@@ -5,7 +5,7 @@ tâche. Ces fichiers sont le contrat du projet. En cas de conflit ou
 d'ambiguïté, arrête-toi et demande une clarification avant de modifier
 le code.
 
-Contexte initial de l’agent. L’agent reçoit : une description textuelle du circuit (les cinq composants et leur rôle, l’ordre du signal de l’entrée vers la sortie), la liste des cinq points de mesure avec leur nom, la liste des trois outils, et le symptôme rapporté. Il ne reçoit ni les tables de valeurs, ni les valeurs du scénario sain, ni la liste des pannes possibles.
+Contexte initial de l’agent. L’agent reçoit : une description textuelle du circuit (les cinq composants et leur rôle, l’ordre du signal de l’entrée vers la sortie), la liste des cinq points de mesure avec leur nom, la liste des trois outils, la fiche technique nominale (tensions DC, amplitudes et qualités attendues en fonctionnement normal, c’est-à-dire la colonne Sain de SPEC.md §4), et le symptôme rapporté. Il ne reçoit ni les tables des quatre pannes, ni aucune mention de leur existence ou de leur nombre, ni la liste des pannes possibles. La consigne système lui impose en outre trois principes de raisonnement : propagation (le fautif précède la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l’accuser).
 
 ## Règles obligatoires
 
@@ -16,8 +16,8 @@ Contexte initial de l’agent. L’agent reçoit : une description textuelle du 
     explicitement demandée. Une fois terminée, lance les vérifications
     pertinentes, résume les changements et attends mon accord. Ne
     commence jamais la tâche suivante de toi-même.
-3.  **Limite de taille :** aucun fichier ne doit dépasser 200 lignes. Si
-    un fichier risque de dépasser cette limite, arrête-toi et propose
+3.  **Limite de taille :** aucun fichier de code ne doit dépasser 200 lignes. Si
+    un fichier de code risque de dépasser cette limite, arrête-toi et propose
     une découpe avant de continuer.
 4.  **Tests obligatoires :** toute fonction du simulateur doit être
     accompagnée d'un test que je peux lancer. Donne la commande exacte
@@ -59,7 +59,7 @@ Contexte initial de l’agent. L’agent reçoit : une description textuelle du 
 4.  Si une information ou décision nécessaire manque, s'arrêter et me
     demander.
 5.  Effectuer uniquement la tâche autorisée.
-6.  Vérifier que chaque fichier modifié fait au plus 200 lignes.
+6.  Vérifier que chaque fichier de code modifié fait au plus 200 lignes.
 7.  Exécuter les tests pertinents, y compris les tests du simulateur
     concernés.
 8.  Résumer les fichiers modifiés, les commandes lancées et les

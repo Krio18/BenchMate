@@ -92,13 +92,10 @@ def recap(journal, statut, hypotheses):
     print(f"Etat final : {hypotheses}")
 
 
-def main():
-    try:
-        sim = Simulator(sys.argv[1] if len(sys.argv) > 1 else None)
-    except ValueError:
-        print("Usage : python diagnostic.py <scenario> (sain, F1-F4)")
-        raise SystemExit(2)
-    print(f"BenchMate 3D -- diagnostic (scenario {sys.argv[1]}, "
+def run_diagnostic(scenario):
+    """Boucle complete sur un scenario ; retourne diagnostic, calls, journal."""
+    sim = Simulator(scenario)
+    print(f"BenchMate 3D -- diagnostic (scenario {scenario}, "
           "masque a l'agent)")
     messages = [{"role": "system", "content": SYSTEME},
                 {"role": "user", "content": USER}]
@@ -118,7 +115,7 @@ def main():
         if diag:
             print(f"=== Fin : DIAGNOSTIC {diag} ===")
             recap(journal, f"diagnostic {diag}", hypotheses)
-            return
+            return {"diagnostic": diag, "calls": calls, "journal": journal}
         if not demandes:
             print("(relance : texte sans appel ni diagnostic)")
             messages.append({"role": "assistant", "content": text})
@@ -127,7 +124,7 @@ def main():
         if calls >= MAX_CALLS:
             print("=== Arret force : budget de 8 appels epuise ===")
             recap(journal, "echec (arret force)", hypotheses)
-            raise SystemExit(1)
+            return {"diagnostic": None, "calls": calls, "journal": journal}
         messages.append({"role": "assistant", "content": text,
                          "tool_calls": demandes})
         for d in demandes[:1]:
@@ -146,6 +143,16 @@ def main():
             print(f"(appel ignore, un seul par tour : {d['function']['name']})")
             messages.append({"role": "tool", "tool_call_id": d["id"],
                              "content": "Un seul outil par tour : appel non execute."})
+
+
+def main():
+    try:
+        res = run_diagnostic(sys.argv[1] if len(sys.argv) > 1 else None)
+    except ValueError:
+        print("Usage : python diagnostic.py <scenario> (sain, F1-F4)")
+        raise SystemExit(2)
+    if res["diagnostic"] is None:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

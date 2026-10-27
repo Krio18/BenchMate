@@ -70,6 +70,8 @@ démonstration, pas des spécifications de fabrication.
   sortie dégradé                                                                                
   -------------------------------------------------------------------------------------------------------------------
 
+Note : la colonne Sain sert aussi de fiche nominale fournie à l'agent ; les colonnes F1 à F4 et toute mention des pannes prédéfinies ou de leur nombre lui restent interdites.
+
 ## 5. Composants inspectables
 
 L'inspection retourne uniquement des métadonnées statiques ; elle ne
@@ -173,6 +175,10 @@ Les erreurs ne sont pas des mesures.
 
 L'agent ne prétend jamais avoir effectué un test sans appel d'outil et
 ne présente pas une hypothèse comme une certitude non étayée.
+
+La consigne système impose trois principes : propagation (une anomalie en amont rend l'aval anormal ; le fautif
+précède immédiatement la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par
+dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l'accuser, même à symptôme purement signal).
 
 ## 8. Journal de diagnostic vérifiable
 Le journal est un livrable obligatoire du MVP, pas une fonctionnalité facultative. Il doit permettre à une personne de vérifier comment l'agent est arrivé à son diagnostic. Chaque tour de diagnostic qui appelle un outil ajoute une entrée au journal contenant au minimum :
