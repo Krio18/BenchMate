@@ -5,7 +5,7 @@ tâche. Ces fichiers sont le contrat du projet. En cas de conflit ou
 d'ambiguïté, arrête-toi et demande une clarification avant de modifier
 le code.
 
-Contexte initial de l’agent. L’agent reçoit : une description textuelle du circuit (les cinq composants et leur rôle, l’ordre du signal de l’entrée vers la sortie), la liste des cinq points de mesure avec leur nom, la liste des trois outils, la fiche technique nominale (tensions DC, amplitudes et qualités attendues en fonctionnement normal, c’est-à-dire la colonne Sain de SPEC.md §4), et le symptôme rapporté. Il ne reçoit ni les tables des quatre pannes, ni aucune mention de leur existence ou de leur nombre, ni la liste des pannes possibles. La consigne système lui impose en outre trois principes de raisonnement : propagation (le fautif précède la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l’accuser).
+Contexte initial de l’agent. L’agent reçoit, construits depuis le dispositif actif : une description textuelle du circuit (ses composants et leur rôle, l’ordre du signal), la liste des points de mesure avec leur nom, la liste des trois outils, la fiche technique nominale (tensions DC, amplitudes et qualités attendues en fonctionnement normal, c’est-à-dire le scénario sain du dispositif), et le symptôme rapporté. Il ne reçoit ni les tables des pannes, ni aucune mention de leur existence ou de leur nombre, ni la liste des pannes possibles. La consigne système, identique pour tous les dispositifs, lui impose en outre trois principes de raisonnement : propagation (le fautif précède la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l’accuser).
 
 ## Règles obligatoires
 
@@ -31,9 +31,9 @@ Contexte initial de l’agent. L’agent reçoit : une description textuelle du 
     est une table de valeurs prédéfinies. Il ne doit pas utiliser de
     bibliothèque de simulation électronique ni essayer de modéliser
     physiquement le circuit.
-7.  **Respect de `SPEC.md` :** ne change pas les quatre pannes, les cinq
-    points de mesure, les trois outils, leurs signatures ou leurs
-    structures de retour sans mon autorisation explicite.
+7.  **Respect de `SPEC.md` :** ne change pas les dispositifs, leurs
+    pannes, leurs points de mesure, les trois outils, leurs signatures
+    ou leurs structures de retour sans mon autorisation explicite.
 8.  **Le simulateur fait autorité :** le modèle ne doit jamais inventer
     une mesure. Les tensions, amplitudes et états de signal sont lus
     dans la table du scénario actif.

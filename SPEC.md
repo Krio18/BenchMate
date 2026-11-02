@@ -2,13 +2,19 @@
 
 ## 1. But et périmètre
 
-BenchMate 3D est une démo d'agent de diagnostic sur un préamplificateur
-audio fictif. L'agent inspecte des composants, demande des mesures,
-révise ses hypothèses et propose un diagnostic. Le circuit n'est pas une
-simulation physique : les résultats viennent exclusivement des tables de
-ce fichier.
+BenchMate 3D est une démo d'agent de diagnostic sur des circuits
+fictifs. L'agent inspecte des composants, demande des mesures,
+révise ses hypothèses et propose un diagnostic. Les circuits ne sont pas
+des simulations physiques : les résultats viennent exclusivement des
+tables des dispositifs.
 
-Le scénario actif contient exactement une des quatre pannes ci-dessous.
+Chaque dispositif est un fichier de données (`devices/*.json`) : la
+chaîne, les points de mesure, les composants, la fiche nominale, le
+symptôme, les scénarios de panne et le budget d'appels. Le
+préamplificateur audio (§3 à §5) est le dispositif de référence ; les
+autres dispositifs suivent le même contrat avec leurs propres tables.
+
+Le scénario actif contient exactement une panne du dispositif actif.
 Le scénario sain est réservé aux tests.
 
 ## 2. Règle d'or
@@ -31,6 +37,8 @@ Le scénario sain est réservé aux tests.
 
 Tensions DC en volts (`V`), amplitudes de signal en volts crête-à-crête
 (`Vpp`). États autorisés : `clean`, `distorted`, `silent`, `weak`.
+Ci-dessous les points du dispositif de référence ; chaque dispositif
+définit les siens dans son fichier.
 
   ID      Nom            Description
   ------- -------------- --------------------------------------------
@@ -70,12 +78,13 @@ démonstration, pas des spécifications de fabrication.
   sortie dégradé                                                                                
   -------------------------------------------------------------------------------------------------------------------
 
-Note : la colonne Sain sert aussi de fiche nominale fournie à l'agent ; les colonnes F1 à F4 et toute mention des pannes prédéfinies ou de leur nombre lui restent interdites.
+Note : la colonne Sain sert aussi de fiche nominale fournie à l'agent ; les colonnes F1 à F4 et toute mention des pannes prédéfinies ou de leur nombre lui restent interdites. Chaque dispositif suit la même règle : seule sa fiche nominale (son scénario sain) est fournie à l'agent.
 
 ## 5. Composants inspectables
 
 L'inspection retourne uniquement des métadonnées statiques ; elle ne
-révèle jamais l'état de panne réel.
+révèle jamais l'état de panne réel. Ci-dessous les composants du
+dispositif de référence.
 
   ID      Nom                          Rôle
   ------- ---------------------------- --------------------------------------
@@ -95,7 +104,8 @@ Aucun outil supplémentaire ne doit être ajouté sans autorisation.
 inspect_component(component_id: str) -> ComponentInfo
 ```
 
-`component_id` doit être `C1`, `R1`, `U1`, `C2` ou `PS1`. Retour :
+`component_id` doit être un identifiant de composant du dispositif actif
+(`C1`, `R1`, `U1`, `C2` ou `PS1` pour le préamplificateur). Retour :
 
 ``` python
 {
@@ -115,7 +125,8 @@ retourner `is_faulty`, la panne active ou un indice qui la révèle.
 measure_voltage(point_id: str) -> VoltageReading
 ```
 
-`point_id` doit être `TP1`, `TP2`, `TP3`, `TP4` ou `TP5`. Retour :
+`point_id` doit être un identifiant de point du dispositif actif
+(`TP1` à `TP5` pour le préamplificateur). Retour :
 
 ``` python
 {
@@ -133,7 +144,8 @@ measure_voltage(point_id: str) -> VoltageReading
 test_signal(point_id: str) -> SignalReading
 ```
 
-`point_id` doit être `TP1`, `TP2`, `TP3`, `TP4` ou `TP5`. Retour :
+`point_id` doit être un identifiant de point du dispositif actif
+(`TP1` à `TP5` pour le préamplificateur). Retour :
 
 ``` python
 {
@@ -163,7 +175,7 @@ Les erreurs ne sont pas des mesures.
 
 ## 7. Boucle attendue de l'agent
 
-1.  Symptôme rapporté, pour tous les scénarios en panne : « La sortie audio ne sonne pas normalement. »
+1.  Symptôme rapporté, celui du dispositif actif, identique pour tous ses scénarios en panne (préamplificateur : « La sortie audio ne sonne pas normalement. »).
 2.  Présenter les causes possibles comme des hypothèses.
 3.  Choisir une inspection ou une mesure discriminante.
 4.  Appeler un outil et rapporter fidèlement son résultat.
@@ -171,7 +183,7 @@ Les erreurs ne sont pas des mesures.
 6.  Recommencer si une autre mesure est utile.
 7.  Donner le diagnostic le mieux étayé, les résultats qui le
     soutiennent et un test de confirmation recommandé.
-8.  La boucle s’arrête quand l’agent nomme un composant, ou après 8 appels d’outils. L’arrêt forcé est journalisé comme un échec de diagnostic.
+8.  La boucle s’arrête quand l’agent nomme un composant, ou quand le budget d’appels est épuisé (8 par défaut, valeur `budget_appels` du dispositif sinon). L’arrêt forcé est journalisé comme un échec de diagnostic. Un seul outil est exécuté par tour ; un texte sans appel ni diagnostic provoque une relance neutre, hors budget.
 
 L'agent ne prétend jamais avoir effectué un test sans appel d'outil et
 ne présente pas une hypothèse comme une certitude non étayée.
@@ -183,17 +195,21 @@ dichotomie sur la grandeur pertinente) et vérification des conditions de foncti
 ## 8. Journal de diagnostic vérifiable
 Le journal est un livrable obligatoire du MVP, pas une fonctionnalité facultative. Il doit permettre à une personne de vérifier comment l'agent est arrivé à son diagnostic. Chaque tour de diagnostic qui appelle un outil ajoute une entrée au journal contenant au minimum :
 - turn : numéro du tour, dans l'ordre chronologique ;
+- reasoning_before : texte de l'agent qui précède l'appel ;
 - tool : nom exact de l'outil appelé ;
 - argument : argument exact transmis à l'outil ;
 - value_received : valeur exacte retournée par l'outil, ou l'erreur structurée reçue ;
+- reasoning_after : texte de l'agent qui suit le résultat ;
 - remaining_hypotheses : hypothèses encore plausibles après prise en compte de ce résultat.
 Les valeurs journalisées doivent correspondre aux appels et retours réels, sans réécriture ni mesure ajoutée par le modèle. Les hypothèses restantes sont l'interprétation de l'agent et doivent rester distinctes des mesures factuelles. Le journal doit être consultable pendant la démonstration et permettre de retracer chaque étape du diagnostic. Ne pas journaliser l'identifiant secret du scénario actif ni une donnée qui le révèle directement.
 
 ## 9. Critères d'acceptation
-- Les quatre pannes et le scénario sain sont encodés comme tables déterministes.
-- Les cinq points et les trois outils respectent ce contrat.
+- Chaque dispositif encode ses pannes et son scénario sain comme tables déterministes.
+- Les points et les trois outils de chaque dispositif respectent ce contrat.
 - Les identifiants invalides renvoient des erreurs explicites.
 - L'agent ne reçoit pas l'identité du scénario actif.
+- Le budget d'appels est celui du dispositif (`budget_appels`, défaut 8).
+- L'export JSON rejoue le passage sans simulateur ni API ; le viewer 3D ne lit que lui.
 - Toute fonction du simulateur a un test exécutable.
 - Chaque tour journalise l'outil appelé, son argument, la valeur exacte reçue et les hypothèses restantes après cette valeur.
 - Le journal est consultable pendant la démo et permet de vérifier la chaîne de diagnostic sans révéler le scénario secret.

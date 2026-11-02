@@ -1,6 +1,6 @@
 """Harnais de mesure : rejoue chaque panne N fois.
 
-Pour chaque scenario F1-F4 : taux de diagnostics corrects et nombre
+Pour chaque scenario en panne : taux de diagnostics corrects et nombre
 moyen d'appels d'outils. La correspondance panne -> composant attendu
 est definie dans export_json (harnais) : jamais du simulateur ni de
 l'agent. Le scenario sain est exclu : aucun composant n'y est en panne.
