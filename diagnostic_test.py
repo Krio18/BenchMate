@@ -5,13 +5,18 @@ Extraction des hypotheses et compteur de budget, avec API simulee
 Commande : python -m pytest diagnostic_test.py -v
 """
 
+import glob
 import json
+import os
 import sys
 
 import pytest
 
 import contexte
 import diagnostic
+from batch import EXPECTED as ATTENDUS_BATCH
+from export_json import EXPECTED as ATTENDUS_EXPORT
+from simulator import charger_dispositif
 
 
 def test_extraction_hypotheses():
@@ -52,7 +57,7 @@ def test_compteur_budget_uniquement_appels_executes(monkeypatch, capsys):
                for i, p in enumerate(points, start=1)]
     script += [{"content": "Une de plus.", "tool_calls": [appel(11, "TP1")]}]
 
-    def faux_appel(messages):
+    def faux_appel(messages, tools):
         assert script, "appel API inattendu"
         return dict(script.pop(0))
 
@@ -73,18 +78,119 @@ def test_compteur_budget_uniquement_appels_executes(monkeypatch, capsys):
 
 
 def test_contexte_nominal_sans_fuite_pannes():
-    blob = (contexte.SYSTEME + "\n" + contexte.USER
-            + json.dumps(contexte.TOOLS)).lower()
+    alim = os.path.join(os.path.dirname(__file__), "devices", "alimentation.json")
+    mot = os.path.join(os.path.dirname(__file__), "devices", "moteur.json")
+    types = {"fusible", "condensateur", "resistance", "circuit_integre",
+             "transistor", "diode", "module"}
     # NB : "panne"/"defaut" generiques exclus : vocabulaire de diagnostic,
     # pas les scenarios de panne predetermines.
-    for token in ["5.2", "2.6", "0.1", "0.5", "0.4", "0.3",
-                  "distorted", "weak", "f1", "f2", "f3", "f4",
-                  "sain", "quatre"]:
-        assert token not in blob, token
-    for attendu in ["fiche technique",
-                    "tp1 : 9.0 v dc, 0.0 vpp, silent",
-                    "tp2 : 4.5 v dc, 0.0 vpp, silent",
-                    "tp3 : 4.5 v dc, 0.2 vpp, clean",
-                    "tp4 : 4.5 v dc, 2.0 vpp, clean",
-                    "tp5 : 0.0 v dc, 2.0 vpp, clean"]:
-        assert attendu in blob, attendu
+    cas = [
+        (None,
+         ["5.2", "2.6", "0.1", "0.5", "0.4", "0.3",
+          "distorted", "weak", "f1", "f2", "f3", "f4",
+          "sain", "quatre"],
+         ["fiche technique",
+          "tp1 : 9.0 v dc, 0.0 vpp, silent",
+          "tp2 : 4.5 v dc, 0.0 vpp, silent",
+          "tp3 : 4.5 v dc, 0.2 vpp, clean",
+          "tp4 : 4.5 v dc, 2.0 vpp, clean",
+          "tp5 : 0.0 v dc, 2.0 vpp, clean"]),
+        (alim,
+         ["9.0", "10.2", "4.8", "4.5", "0.9", "0.15", "0.12",
+          "10.8", "2.6", "4.9", "0.35", "0.3", "3.1", "0.05", "0.04", "0.18",
+          "distorted", "g1", "g2", "g3", "g4", "sain", "quatre"],
+         ["fiche technique",
+          "tp1 : 11.5 v dc, 2.00 vpp, clean",
+          "tp2 : 12.0 v dc, 0.20 vpp, clean",
+          "tp3 : 12.0 v dc, 0.20 vpp, clean",
+          "tp4 : 5.00 v dc, 0.02 vpp, clean",
+          "tp5 : 5.00 v dc, 0.01 vpp, clean",
+          "tp6 : 5.00 v dc, 0.01 vpp, clean",
+          "ondulation"]),
+        (mot,
+         ["11.2", "1.80", "2.10", "0.00", "5.60", "11.0",
+          "0.14", "0.09", "0.06",
+          "distorted", "silent", "weak",
+          "h1", "h2", "h3", "h4", "h5", "h6", "sain", "six"],
+         ["fiche technique",
+          "tp1 : 12.0 v dc, 0.05 vpp, clean",
+          "tp2 : 12.0 v dc, 0.05 vpp, clean",
+          "tp3 : 12.0 v dc, 0.05 vpp, clean",
+          "tp4 : 12.0 v dc, 0.05 vpp, clean",
+          "tp5 : 5.00 v dc, 0.02 vpp, clean",
+          "tp6 : 5.00 v dc, 0.02 vpp, clean",
+          "tp7 : 2.50 v dc, 5.00 vpp, clean",
+          "tp8 : 2.50 v dc, 5.00 vpp, clean",
+          "tp9 : 6.00 v dc, 12.0 vpp, clean",
+          "tp10 : 0.15 v dc, 0.05 vpp, clean",
+          "commuté"]),
+    ]
+    for dispositif, interdits, attendus in cas:
+        systeme, user, tools = contexte.construire_contexte(dispositif)
+        blob = (systeme + "\n" + user + json.dumps(tools)).lower()
+        for token in interdits:
+            assert token not in blob, (dispositif, token)
+        for attendu in attendus:
+            assert attendu in blob, (dispositif, attendu)
+        # NB : fragment JSON exact, car "condensateur" seul est dans la prose.
+        data = charger_dispositif(dispositif)
+        for c in data["components"]:
+            assert c["type"] in types, (dispositif, c["id"])
+            assert f'"type": "{c["type"]}"' not in blob, (dispositif, c["id"])
+        envoyes = {e["id"] for e in data["points"] + data["components"]}
+        for e in data["points"] + data["components"]:
+            assert isinstance(e["x"], int) and isinstance(e["y"], int)
+            assert f'"x": {e["x"]}' not in blob and f'"y": {e["y"]}' not in blob
+        assert '"liaisons"' not in blob
+        assert all(len(l) == 2 and l[0] in envoyes and l[1] in envoyes
+                   for l in data["liaisons"])
+
+
+def test_consigne_sans_identifiant_dispositif():
+    fichiers = sorted(glob.glob(os.path.join(os.path.dirname(__file__), "devices", "*.json")))
+    assert fichiers, "aucun fichier dispositif"
+    ids = set()
+    for chemin in fichiers:
+        with open(chemin, encoding="utf-8") as f:
+            d = json.load(f)
+        ids.update(p["id"] for p in d["points"])
+        ids.update(c["id"] for c in d["components"])
+    assert len(ids) >= 10
+    for ident in sorted(ids):
+        assert ident not in contexte.SYSTEME_TEMPLATE, ident
+
+
+def test_journal_textes_avant_apres(monkeypatch, tmp_path):
+    avant = "HYPOTHESES : C1, U1\nJe mesure TP1."
+    apres = "HYPOTHESES : U1\nDIAGNOSTIC : U1, TP1 bas."
+    script = [
+        {"content": avant, "tool_calls": [{"id": "t1", "function": {
+            "name": "measure_voltage",
+            "arguments": json.dumps({"point_id": "TP1"})}}]},
+        {"content": apres, "tool_calls": []},
+    ]
+    monkeypatch.setattr(diagnostic, "appel_api", lambda m, t: dict(script.pop(0)))
+    out = tmp_path / "passage.json"
+    res = diagnostic.run_diagnostic("F1", json_path=str(out))
+    assert res["diagnostic"] == "U1"
+    assert ATTENDUS_BATCH is ATTENDUS_EXPORT
+    export = json.loads(out.read_text(encoding="utf-8"))
+    assert export["attendu"] == "PS1"
+    tour = export["tours"][0]
+    assert tour["turn"] == 1
+    assert tour["reasoning_before"] == avant
+    assert tour["tool"] == "measure_voltage"
+    assert json.loads(tour["value_received"])["voltage_v"] == 5.2
+    assert tour["reasoning_after"] == apres
+    assert tour["remaining_hypotheses"] == "U1"
+
+
+def test_budget_appels_par_dispositif(monkeypatch):
+    script = [{"content": "HYPOTHESES : FU1\nMesure.",
+               "tool_calls": [{"id": f"t{i}", "function": {
+                   "name": "measure_voltage",
+                   "arguments": json.dumps({"point_id": "TP1"})}}]}
+              for i in range(13)]
+    monkeypatch.setattr(diagnostic, "appel_api", lambda m, t: dict(script.pop(0)))
+    res = diagnostic.run_diagnostic("H1", "moteur")
+    assert res["diagnostic"] is None and res["calls"] == 12

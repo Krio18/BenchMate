@@ -1,0 +1,208 @@
+{
+  "dispositif": "une alimentation stabilisée fictive",
+  "scenario": "G3",
+  "attendu": "U1",
+  "symptome": "La tension de sortie n'est pas stable.",
+  "chaine": "Le circuit est une alimentation stabilisée fictive : le secteur entre par le pont redresseur D1, traverse le condensateur de filtrage C1 puis le régulateur U1, et ressort par le condensateur de sortie C2 vers la charge.",
+  "points": [
+    {
+      "id": "TP1",
+      "x": 60,
+      "y": 100,
+      "name": "RECT_OUT",
+      "description": "sortie du pont redresseur"
+    },
+    {
+      "id": "TP2",
+      "x": 150,
+      "y": 100,
+      "name": "FILT_OUT",
+      "description": "après le condensateur de filtrage"
+    },
+    {
+      "id": "TP3",
+      "x": 240,
+      "y": 100,
+      "name": "REG_IN",
+      "description": "entrée du régulateur"
+    },
+    {
+      "id": "TP4",
+      "x": 330,
+      "y": 100,
+      "name": "REG_OUT",
+      "description": "sortie du régulateur"
+    },
+    {
+      "id": "TP5",
+      "x": 420,
+      "y": 100,
+      "name": "CAP_OUT",
+      "description": "après le condensateur de sortie"
+    },
+    {
+      "id": "TP6",
+      "x": 510,
+      "y": 100,
+      "name": "LOAD",
+      "description": "aux bornes de la charge"
+    }
+  ],
+  "composants": [
+    {
+      "id": "D1",
+      "x": 105,
+      "y": 280,
+      "type": "diode",
+      "name": "Pont redresseur",
+      "role": "Redresse la tension alternative",
+      "visual_notes": "Pont redresseur moulé, marquage de référence lisible."
+    },
+    {
+      "id": "C1",
+      "x": 195,
+      "y": 280,
+      "type": "condensateur",
+      "name": "Condensateur de filtrage",
+      "role": "Lisse la tension redressée",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U1",
+      "x": 330,
+      "y": 280,
+      "type": "circuit_integre",
+      "name": "Régulateur",
+      "role": "Fournit une tension de sortie stable à 5 V",
+      "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "C2",
+      "x": 465,
+      "y": 280,
+      "type": "condensateur",
+      "name": "Condensateur de sortie",
+      "role": "Découple la sortie",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    }
+  ],
+  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 11.5 V DC, 2.00 Vpp, clean ; TP2 : 12.0 V DC, 0.20 Vpp, clean ; TP3 : 12.0 V DC, 0.20 Vpp, clean ; TP4 : 5.00 V DC, 0.02 Vpp, clean ; TP5 : 5.00 V DC, 0.01 Vpp, clean ; TP6 : 5.00 V DC, 0.01 Vpp, clean. TP1 porte une ondulation élevée en fonctionnement normal, puisque c'est la sortie brute du pont redresseur.",
+  "table": {
+    "TP1": [
+      11.5,
+      2.0,
+      "clean"
+    ],
+    "TP2": [
+      12.0,
+      0.2,
+      "clean"
+    ],
+    "TP3": [
+      12.0,
+      0.2,
+      "clean"
+    ],
+    "TP4": [
+      3.1,
+      0.05,
+      "clean"
+    ],
+    "TP5": [
+      3.1,
+      0.04,
+      "clean"
+    ],
+    "TP6": [
+      3.1,
+      0.04,
+      "clean"
+    ]
+  },
+  "tours": [
+    {
+      "turn": 1,
+      "reasoning_before": "Je caractérise le symptôme en sortie avant de remonter la chaîne.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP6\"}",
+      "value_received": "{\"point_id\": \"TP6\", \"voltage_v\": 3.1, \"unit\": \"V\"}",
+      "reasoning_after": "La sortie est basse en continu : je remonte au milieu de la chaîne pour localiser la première anomalie.",
+      "remaining_hypotheses": "D1, C1, U1, C2"
+    },
+    {
+      "turn": 2,
+      "reasoning_before": "La sortie est basse en continu : je remonte au milieu de la chaîne pour localiser la première anomalie.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"voltage_v\": 12.0, \"unit\": \"V\"}",
+      "reasoning_after": "La tension en charge est basse alors que l'entrée régulateur est nominale : je resserre autour du régulateur.",
+      "remaining_hypotheses": "D1, C1, U1, C2"
+    },
+    {
+      "turn": 3,
+      "reasoning_before": "La tension en charge est basse alors que l'entrée régulateur est nominale : je resserre autour du régulateur.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP4\"}",
+      "value_received": "{\"point_id\": \"TP4\", \"voltage_v\": 3.1, \"unit\": \"V\"}",
+      "reasoning_after": "Faits mesurés : TP6 = 3,1 V DC anormal (attendu 5,00 V), TP3 = 12,0 V DC nominal, TP4 = 3,1 V DC anormal (attendu 5,00 V). Le symptôme est donc un défaut de tension continue. TP3 nominal exclut tout défaut en amont D1/C1, car une anomalie en amont rend anormal tout l'aval. Premier point anormal de la chaîne : TP4, dont l'entrée REG_IN TP3 est nominale. Les conditions d'alimentation de U1 sont nominales, donc U1 ne subit pas, il dégrade.\nHYPOTHESES : U1\nDIAGNOSTIC : U1, car premier point anormal TP4 immédiatement en aval de U1 avec entrée TP3 nominale 12V, donc U1 en conditions nominales qui chute à 3,1V est fautif ; test de confirmation recommandé : remplacer U1 et vérifier retour à 5,00 V DC en TP4/TP6.",
+      "remaining_hypotheses": "U1"
+    }
+  ],
+  "diagnostic": "U1",
+  "justification": ", car premier point anormal TP4 immédiatement en aval de U1 avec entrée TP3 nominale 12V, donc U1 en conditions nominales qui chute à 3,1V est fautif ; test de confirmation recommandé : remplacer U1 et vérifier retour à 5,00 V DC en TP4/TP6",
+  "nb_appels": 3,
+  "liaisons": [
+    [
+      "TP1",
+      "TP2"
+    ],
+    [
+      "TP2",
+      "TP3"
+    ],
+    [
+      "TP3",
+      "TP4"
+    ],
+    [
+      "TP4",
+      "TP5"
+    ],
+    [
+      "TP5",
+      "TP6"
+    ],
+    [
+      "TP1",
+      "D1"
+    ],
+    [
+      "D1",
+      "TP2"
+    ],
+    [
+      "TP2",
+      "C1"
+    ],
+    [
+      "C1",
+      "TP3"
+    ],
+    [
+      "TP3",
+      "U1"
+    ],
+    [
+      "U1",
+      "TP4"
+    ],
+    [
+      "TP4",
+      "C2"
+    ],
+    [
+      "C2",
+      "TP5"
+    ]
+  ]
+}

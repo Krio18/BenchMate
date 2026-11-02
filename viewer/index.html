@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BenchMate — rejeu</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="scene"></div><div id="voile"></div>
+
+<header id="barre" class="verre">
+  <div class="marque"><span class="puce-logo"><i></i></span>BenchMate <small>rejeu</small></div>
+  <div id="dispo" hidden><span id="nomDispo"></span><span id="scen" class="puce"></span></div>
+  <div class="cmds">
+    <button class="btn" id="bOuvrir" title="Ouvrir un journal (O)"><svg viewBox="0 0 24 24"><path d="M4 6.5A1.5 1.5 0 0 1 5.5 5H10l2 2.5h6.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Journal</span></button>
+    <button class="btn" id="bVitesse" title="Vitesse de lecture (S)">1×</button>
+    <button class="btn" id="bSon" title="Son (M)"></button>
+    <button class="btn" id="bPlein" title="Plein écran (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</header>
+
+<section id="accueil">
+  <div class="surtitre entree" style="--d:.1s">Muse Spark · diagnostic de panne</div>
+  <h1 class="entree" style="--d:.25s">Bench<em>Mate</em></h1>
+  <p class="accroche entree" style="--d:.45s">Un agent qui formule ses hypothèses, choisit où mesurer et élimine — sur un banc qui ne le laisse rien inventer.</p>
+  <label id="depot" class="verre entree" style="--d:.65s">
+    <span class="depot-ico"><svg viewBox="0 0 24 24"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span><b>Déposez un journal de passage</b><small>ou cliquez pour choisir un fichier .json</small></span>
+    <input type="file" id="fichier" accept=".json,application/json" hidden>
+  </label>
+  <button id="bReprendre" class="entree" style="--d:.8s" hidden>Reprendre <span></span><kbd>Entrée</kbd></button>
+  <p class="astuce entree" style="--d:.95s"><span><kbd>Espace</kbd> lecture / pause</span><span><kbd>←</kbd> <kbd>→</kbd> pas à pas</span><span><kbd>R</kbd> rejouer</span><span><kbd>F</kbd> plein écran</span></p>
+</section>
+
+<aside id="panneau" class="verre">
+  <section class="symptome"><h2>Symptôme rapporté</h2><p id="symptome"></p></section>
+  <section><h2>Hypothèses en lice <span id="compte"></span></h2><div id="jetons"></div></section>
+  <section class="journal"><h2>Journal des mesures</h2><p id="vide">Les mesures choisies par l'agent apparaîtront ici.</p><ol id="etapes"></ol></section>
+</aside>
+
+<div id="soustitre" class="verre" hidden><div class="qui"><span class="orbe"></span>Muse Spark <em id="phase"></em></div><p id="pensee"></p></div>
+<div id="cta" hidden><button id="bLancer"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>Lancer le diagnostic</button><small><kbd>Espace</kbd> pour démarrer</small></div>
+<div id="verdict" class="verre" hidden>
+  <div class="v-tete"><span class="orbe"></span>Diagnostic de Muse Spark</div>
+  <div class="v-corps"><div id="vId"></div><div><div id="vNom"></div><div id="vRole"></div></div></div>
+  <p id="vJust"></p>
+  <div class="v-pied"><span id="vReel"></span><span id="vMes"></span><span id="vHyp"></span></div>
+</div>
+<nav id="frise" class="verre"><button id="bLecture" title="Lecture / pause (Espace)"></button><div class="rail"><div class="piste"><i id="barreProg"></i></div><div id="points"></div></div><button class="btn" id="bRejouer" title="Rejouer (R)"></button></nav>
+<div id="infobulle" class="verre" hidden></div>
+<div id="erreur" hidden></div>
+
+<script src="donnees.js"></script>
+<script src="scene.js"></script>
+<script src="plateau.js"></script>
+<script src="composants.js"></script>
+<script src="effets.js"></script>
+<script src="banc.js"></script>
+<script src="panneau.js"></script>
+<script src="son.js"></script>
+<script src="lecture.js"></script>
+<!-- Three.js r170 embarqué (aucune connexion requise) -->
+<script src="vendor/three-r170.min.js"></script>
+<script>
+if (window.TROIS) BM.demarrer(window.TROIS);
+else BM.erreur("Three.js introuvable : le fichier viewer/vendor/three-r170.min.js est manquant.");
+</script>
+</body>
+</html>

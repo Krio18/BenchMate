@@ -1,0 +1,72 @@
+{
+  "name": "un preamplificateur audio fictif",
+  "chain": "Le circuit est un preamplificateur audio fictif : le signal entre par le condensateur d'entree C1, traverse le reseau de polarisation R1 puis l'amplificateur operationnel U1, et ressort par le condensateur de sortie C2 vers la sortie audio. L'alimentation PS1 fournit le rail 9 V a l'ensemble du circuit.",
+  "points": [
+    {"id": "TP1", "x": 70, "y": 100, "name": "SUPPLY_9V", "description": "rail d'alimentation"},
+    {"id": "TP2", "x": 185, "y": 100, "name": "BIAS_REF", "description": "reference de polarisation"},
+    {"id": "TP3", "x": 300, "y": 100, "name": "AMP_INPUT", "description": "entree amplificateur"},
+    {"id": "TP4", "x": 415, "y": 100, "name": "AMP_OUTPUT", "description": "sortie amplificateur"},
+    {"id": "TP5", "x": 530, "y": 100, "name": "AUDIO_OUT", "description": "sortie audio apres condensateur de liaison"}
+  ],
+  "components": [
+    {"id": "C1", "x": 185, "y": 280, "type": "condensateur", "name": "Condensateur d'entrée", "role": "Couple le signal d'entrée", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
+    {"id": "R1", "x": 300, "y": 280, "type": "resistance", "name": "Réseau de polarisation", "role": "Établit la référence de polarisation", "visual_notes": "Réseau de résistances traversant, marquage de référence lisible."},
+    {"id": "U1", "x": 415, "y": 280, "type": "circuit_integre", "name": "Amplificateur opérationnel", "role": "Amplifie le signal", "visual_notes": "Circuit intégré traversant, marquage de référence lisible."},
+    {"id": "C2", "x": 530, "y": 280, "type": "condensateur", "name": "Condensateur de sortie", "role": "Couple le signal vers la sortie", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
+    {"id": "PS1", "x": 70, "y": 280, "type": "module", "name": "Alimentation", "role": "Fournit le rail d'alimentation", "visual_notes": "Module d'alimentation, marquage de référence lisible."}
+  ],
+  "liaisons": [
+    ["TP1", "TP2"],
+    ["TP2", "TP3"],
+    ["TP3", "TP4"],
+    ["TP4", "TP5"],
+    ["TP1", "PS1"],
+    ["TP2", "R1"],
+    ["TP3", "U1"],
+    ["TP4", "U1"],
+    ["TP5", "C2"],
+    ["PS1", "C1"],
+    ["C1", "R1"],
+    ["R1", "U1"],
+    ["U1", "C2"]
+  ],
+  "scenarios": {
+    "sain": {
+      "TP1": [9.0, 0.0, "silent"],
+      "TP2": [4.5, 0.0, "silent"],
+      "TP3": [4.5, 0.2, "clean"],
+      "TP4": [4.5, 2.0, "clean"],
+      "TP5": [0.0, 2.0, "clean"]
+    },
+    "F1": {
+      "TP1": [5.2, 0.0, "silent"],
+      "TP2": [2.6, 0.0, "silent"],
+      "TP3": [2.6, 0.2, "clean"],
+      "TP4": [2.6, 0.5, "distorted"],
+      "TP5": [0.0, 0.4, "distorted"]
+    },
+    "F2": {
+      "TP1": [9.0, 0.0, "silent"],
+      "TP2": [0.1, 0.0, "silent"],
+      "TP3": [0.1, 0.2, "clean"],
+      "TP4": [0.1, 0.1, "silent"],
+      "TP5": [0.0, 0.1, "silent"]
+    },
+    "F3": {
+      "TP1": [9.0, 0.0, "silent"],
+      "TP2": [4.5, 0.0, "silent"],
+      "TP3": [4.5, 0.2, "clean"],
+      "TP4": [4.5, 0.2, "distorted"],
+      "TP5": [0.0, 0.2, "distorted"]
+    },
+    "F4": {
+      "TP1": [9.0, 0.0, "silent"],
+      "TP2": [4.5, 0.0, "silent"],
+      "TP3": [4.5, 0.2, "clean"],
+      "TP4": [4.5, 2.0, "clean"],
+      "TP5": [0.0, 0.3, "weak"]
+    }
+  },
+  "nominal": "Fiche technique du constructeur, fonctionnement normal : TP1 : 9.0 V DC, 0.0 Vpp, silent ; TP2 : 4.5 V DC, 0.0 Vpp, silent ; TP3 : 4.5 V DC, 0.2 Vpp, clean ; TP4 : 4.5 V DC, 2.0 Vpp, clean ; TP5 : 0.0 V DC, 2.0 Vpp, clean.",
+  "symptom": "La sortie audio ne sonne pas normalement."
+}

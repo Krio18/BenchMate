@@ -3,9 +3,11 @@
 Commande : python -m pytest simulator_test.py -v
 """
 
+import os
+
 import pytest
 
-from simulator import SCENARIOS, Simulator
+from simulator import SCENARIOS, Simulator, charger_dispositif
 
 POINTS = ["TP1", "TP2", "TP3", "TP4", "TP5"]
 COMPONENT_IDS = ["C1", "R1", "U1", "C2", "PS1"]
@@ -157,3 +159,12 @@ def test_tool_results_never_reveal_scenario():
             assert "scenario" not in res
             for value in res.values():
                 assert value not in EXPECTED, (scenario, res)
+
+
+def test_charger_dispositif_nom_sans_extension(monkeypatch):
+    monkeypatch.chdir(os.path.dirname(os.path.abspath(__file__)))
+    data = charger_dispositif("alimentation")
+    assert [p["id"] for p in data["points"]] == ["TP1", "TP2", "TP3", "TP4", "TP5", "TP6"]
+    assert [c["id"] for c in data["components"]] == ["D1", "C1", "U1", "C2"]
+    with pytest.raises(FileNotFoundError):
+        charger_dispositif("dispositif_inexistant_xyz")

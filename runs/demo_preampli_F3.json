@@ -1,0 +1,232 @@
+{
+  "dispositif": "un preamplificateur audio fictif",
+  "scenario": "F3",
+  "attendu": "U1",
+  "symptome": "La sortie audio ne sonne pas normalement.",
+  "chaine": "Le circuit est un preamplificateur audio fictif : le signal entre par le condensateur d'entree C1, traverse le reseau de polarisation R1 puis l'amplificateur operationnel U1, et ressort par le condensateur de sortie C2 vers la sortie audio. L'alimentation PS1 fournit le rail 9 V a l'ensemble du circuit.",
+  "points": [
+    {
+      "id": "TP1",
+      "x": 70,
+      "y": 100,
+      "name": "SUPPLY_9V",
+      "description": "rail d'alimentation"
+    },
+    {
+      "id": "TP2",
+      "x": 185,
+      "y": 100,
+      "name": "BIAS_REF",
+      "description": "reference de polarisation"
+    },
+    {
+      "id": "TP3",
+      "x": 300,
+      "y": 100,
+      "name": "AMP_INPUT",
+      "description": "entree amplificateur"
+    },
+    {
+      "id": "TP4",
+      "x": 415,
+      "y": 100,
+      "name": "AMP_OUTPUT",
+      "description": "sortie amplificateur"
+    },
+    {
+      "id": "TP5",
+      "x": 530,
+      "y": 100,
+      "name": "AUDIO_OUT",
+      "description": "sortie audio apres condensateur de liaison"
+    }
+  ],
+  "composants": [
+    {
+      "id": "C1",
+      "x": 185,
+      "y": 280,
+      "type": "condensateur",
+      "name": "Condensateur d'entrée",
+      "role": "Couple le signal d'entrée",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "R1",
+      "x": 300,
+      "y": 280,
+      "type": "resistance",
+      "name": "Réseau de polarisation",
+      "role": "Établit la référence de polarisation",
+      "visual_notes": "Réseau de résistances traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U1",
+      "x": 415,
+      "y": 280,
+      "type": "circuit_integre",
+      "name": "Amplificateur opérationnel",
+      "role": "Amplifie le signal",
+      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+    },
+    {
+      "id": "C2",
+      "x": 530,
+      "y": 280,
+      "type": "condensateur",
+      "name": "Condensateur de sortie",
+      "role": "Couple le signal vers la sortie",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "PS1",
+      "x": 70,
+      "y": 280,
+      "type": "module",
+      "name": "Alimentation",
+      "role": "Fournit le rail d'alimentation",
+      "visual_notes": "Module d'alimentation, marquage de référence lisible."
+    }
+  ],
+  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 9.0 V DC, 0.0 Vpp, silent ; TP2 : 4.5 V DC, 0.0 Vpp, silent ; TP3 : 4.5 V DC, 0.2 Vpp, clean ; TP4 : 4.5 V DC, 2.0 Vpp, clean ; TP5 : 0.0 V DC, 2.0 Vpp, clean.",
+  "table": {
+    "TP1": [
+      9.0,
+      0.0,
+      "silent"
+    ],
+    "TP2": [
+      4.5,
+      0.0,
+      "silent"
+    ],
+    "TP3": [
+      4.5,
+      0.2,
+      "clean"
+    ],
+    "TP4": [
+      4.5,
+      0.2,
+      "distorted"
+    ],
+    "TP5": [
+      0.0,
+      0.2,
+      "distorted"
+    ]
+  },
+  "tours": [
+    {
+      "turn": 1,
+      "reasoning_before": "Je commence par caractériser le symptôme en sortie pour isoler la grandeur en cause.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP5\"}",
+      "value_received": "{\"point_id\": \"TP5\", \"amplitude_vpp\": 0.2, \"quality\": \"distorted\"}",
+      "reasoning_after": "Sortie dégradée en TP5 : je vérifie sa tension continue pour identifier la nature du défaut.",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 2,
+      "reasoning_before": "Sortie dégradée en TP5 : je vérifie sa tension continue pour identifier la nature du défaut.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP5\"}",
+      "value_received": "{\"point_id\": \"TP5\", \"voltage_v\": 0.0, \"unit\": \"V\"}",
+      "reasoning_after": "Faits mesurés : TP5 signal 0,2 Vpp distordu (attendu 2,0 clean) ; TP5 DC 0,0 V nominale. Le défaut est donc sur le signal, pas sur le continu. Je remonte par dichotomie au milieu de la chaîne signal.\nHYPOTHESES : C1, R1, U1, C2, PS1",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 3,
+      "reasoning_before": "Faits mesurés : TP5 signal 0,2 Vpp distordu (attendu 2,0 clean) ; TP5 DC 0,0 V nominale. Le défaut est donc sur le signal, pas sur le continu. Je remonte par dichotomie au milieu de la chaîne signal.\nHYPOTHESES : C1, R1, U1, C2, PS1",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"amplitude_vpp\": 0.2, \"quality\": \"clean\"}",
+      "reasoning_after": "Le défaut est sur le signal (DC TP5 nominale). TP3 nominal : la panne est en aval. Je teste au milieu aval.",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 4,
+      "reasoning_before": "Le défaut est sur le signal (DC TP5 nominale). TP3 nominal : la panne est en aval. Je teste au milieu aval.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP4\"}",
+      "value_received": "{\"point_id\": \"TP4\", \"amplitude_vpp\": 0.2, \"quality\": \"distorted\"}",
+      "reasoning_after": "TP3 nominal et TP4 anormal : le premier point anormal est TP4. Je vérifie les conditions de U1 avant de conclure.",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 5,
+      "reasoning_before": "TP3 nominal et TP4 anormal : le premier point anormal est TP4. Je vérifie les conditions de U1 avant de conclure.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP1\"}",
+      "value_received": "{\"point_id\": \"TP1\", \"voltage_v\": 9.0, \"unit\": \"V\"}",
+      "reasoning_after": "Faits : TP5 signal 0,2 Vpp distordu vs 2,0 clean attendu, DC 0,0 V nominale => défaut signal. TP3 signal nominal => amont OK. TP4 premier point anormal (0,2 distordu vs 2,0 clean). TP1 alim 9 V nominale. Reste à vérifier DC entrée U1.\nHYPOTHESES : U1",
+      "remaining_hypotheses": "U1"
+    },
+    {
+      "turn": 6,
+      "reasoning_before": "Faits : TP5 signal 0,2 Vpp distordu vs 2,0 clean attendu, DC 0,0 V nominale => défaut signal. TP3 signal nominal => amont OK. TP4 premier point anormal (0,2 distordu vs 2,0 clean). TP1 alim 9 V nominale. Reste à vérifier DC entrée U1.\nHYPOTHESES : U1",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"voltage_v\": 4.5, \"unit\": \"V\"}",
+      "reasoning_after": "Faits mesurés : TP5 signal 0,2 Vpp distordu (attendu 2,0 clean) avec DC 0,0 V nominale => défaut sur le signal, pas sur le continu. TP3 signal 0,2 Vpp clean nominal => amont OK. TP4 signal 0,2 Vpp distordu (attendu 2,0 clean) => premier point anormal de la chaîne signal. Conditions de U1 vérifiées : alimentation TP1 9,0 V nominale, DC entrée TP3 4,5 V nominale, signal entrée TP3 nominal. U1 en conditions nominales dégrade le signal.\nHYPOTHESES : U1\nDIAGNOSTIC : U1, entrée et alimentation nominales avec sortie dégradée donc amplificateur fautif, test de confirmation recommandé : remplacement / substitution de U1 puis contrôle signal TP4 2,0 Vpp clean",
+      "remaining_hypotheses": "U1"
+    }
+  ],
+  "diagnostic": "U1",
+  "justification": ", entrée et alimentation nominales avec sortie dégradée donc amplificateur fautif, test de confirmation recommandé : remplacement / substitution de U1 puis contrôle signal TP4 2,0 Vpp clean",
+  "nb_appels": 6,
+  "liaisons": [
+    [
+      "TP1",
+      "TP2"
+    ],
+    [
+      "TP2",
+      "TP3"
+    ],
+    [
+      "TP3",
+      "TP4"
+    ],
+    [
+      "TP4",
+      "TP5"
+    ],
+    [
+      "TP1",
+      "PS1"
+    ],
+    [
+      "TP2",
+      "R1"
+    ],
+    [
+      "TP3",
+      "U1"
+    ],
+    [
+      "TP4",
+      "U1"
+    ],
+    [
+      "TP5",
+      "C2"
+    ],
+    [
+      "PS1",
+      "C1"
+    ],
+    [
+      "C1",
+      "R1"
+    ],
+    [
+      "R1",
+      "U1"
+    ],
+    [
+      "U1",
+      "C2"
+    ]
+  ]
+}

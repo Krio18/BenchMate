@@ -1,0 +1,490 @@
+{
+  "dispositif": "une carte de contrôle de drone quadrirotor fictive",
+  "scenario": "J2",
+  "attendu": "FU1",
+  "symptome": "Le drone ne parvient pas à décoller : le moteur ne répond pas normalement.",
+  "chaine": "Le circuit est une carte de contrôle de drone quadrirotor fictive, étudiée sur une voie moteur : la batterie 14,8 V entre par le fusible FU1 puis le condensateur réservoir C1 vers le rail batterie. Le rail batterie alimente deux branches. Branche logique : le convertisseur abaisseur U1 découpe le rail batterie ; son nœud de commutation est lissé par l'inductance L1 pour produire le rail 5 V. Le rail 5 V alimente le récepteur radio RX1 et le régulateur U2, qui produit le rail 3,3 V. Le rail 3,3 V alimente l'oscillateur à quartz Y1, la centrale inertielle U4 et le microcontrôleur de vol U3. U3 est cadencé par l'horloge de Y1, reçoit la consigne du pilote depuis RX1, interroge U4 sur le bus capteur qu'il cadence lui-même, et produit la commande PWM du moteur. Branche puissance : le pilote de grille U5, alimenté par le rail batterie, amplifie la commande PWM ; sa sortie traverse la résistance de grille R1 vers la grille du MOSFET Q1, qui commute le courant du moteur mesuré par le shunt. La diode de roue libre D1 est en parallèle du moteur.",
+  "points": [
+    {
+      "id": "TP1",
+      "x": 40,
+      "y": 50,
+      "name": "BATT_IN",
+      "description": "entrée batterie, avant fusible"
+    },
+    {
+      "id": "TP2",
+      "x": 190,
+      "y": 50,
+      "name": "APRES_FUSIBLE",
+      "description": "après le fusible"
+    },
+    {
+      "id": "TP3",
+      "x": 340,
+      "y": 50,
+      "name": "RAIL_BATT",
+      "description": "rail batterie, après le condensateur réservoir"
+    },
+    {
+      "id": "TP4",
+      "x": 500,
+      "y": 50,
+      "name": "NOEUD_SW",
+      "description": "nœud de commutation du convertisseur, avant l'inductance"
+    },
+    {
+      "id": "TP5",
+      "x": 660,
+      "y": 50,
+      "name": "RAIL_5V",
+      "description": "rail 5 V, après l'inductance"
+    },
+    {
+      "id": "TP6",
+      "x": 500,
+      "y": 170,
+      "name": "RAIL_3V3",
+      "description": "rail 3,3 V, sortie du régulateur"
+    },
+    {
+      "id": "TP7",
+      "x": 340,
+      "y": 170,
+      "name": "HORLOGE",
+      "description": "horloge de l'oscillateur à quartz vers le microcontrôleur"
+    },
+    {
+      "id": "TP8",
+      "x": 250,
+      "y": 290,
+      "name": "BUS_CAPTEUR",
+      "description": "bus de données entre le microcontrôleur et la centrale inertielle"
+    },
+    {
+      "id": "TP9",
+      "x": 760,
+      "y": 240,
+      "name": "CONSIGNE_RADIO",
+      "description": "consigne du pilote, sortie du récepteur radio"
+    },
+    {
+      "id": "TP10",
+      "x": 340,
+      "y": 400,
+      "name": "PWM_MCU",
+      "description": "commande PWM, sortie du microcontrôleur"
+    },
+    {
+      "id": "TP11",
+      "x": 500,
+      "y": 400,
+      "name": "SORTIE_PILOTE",
+      "description": "sortie du pilote de grille, avant la résistance de grille"
+    },
+    {
+      "id": "TP12",
+      "x": 660,
+      "y": 400,
+      "name": "GRILLE_Q1",
+      "description": "grille du MOSFET"
+    },
+    {
+      "id": "TP13",
+      "x": 740,
+      "y": 320,
+      "name": "PHASE_MOTEUR",
+      "description": "borne du moteur"
+    },
+    {
+      "id": "TP14",
+      "x": 840,
+      "y": 400,
+      "name": "SHUNT",
+      "description": "aux bornes du shunt de mesure de courant"
+    }
+  ],
+  "composants": [
+    {
+      "id": "FU1",
+      "x": 115,
+      "y": 50,
+      "type": "fusible",
+      "name": "Fusible principal",
+      "role": "Protège l'entrée batterie",
+      "visual_notes": "Fusible traversant, marquage de référence lisible."
+    },
+    {
+      "id": "C1",
+      "x": 265,
+      "y": 50,
+      "type": "condensateur",
+      "name": "Condensateur réservoir",
+      "role": "Lisse le rail batterie",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U1",
+      "x": 420,
+      "y": 50,
+      "type": "circuit_integre",
+      "name": "Convertisseur abaisseur",
+      "role": "Découpe le rail batterie pour produire le 5 V",
+      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+    },
+    {
+      "id": "L1",
+      "x": 580,
+      "y": 50,
+      "type": "inductance",
+      "name": "Inductance de lissage",
+      "role": "Lisse le courant du convertisseur vers le rail 5 V",
+      "visual_notes": "Inductance torique bobinée, marquage de référence lisible."
+    },
+    {
+      "id": "U2",
+      "x": 580,
+      "y": 170,
+      "type": "circuit_integre",
+      "name": "Régulateur 3,3 V",
+      "role": "Alimente la logique en 3,3 V",
+      "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "Y1",
+      "x": 420,
+      "y": 170,
+      "type": "quartz",
+      "name": "Oscillateur à quartz",
+      "role": "Cadence le microcontrôleur",
+      "visual_notes": "Oscillateur en boîtier métallique, marquage de référence lisible."
+    },
+    {
+      "id": "RX1",
+      "x": 760,
+      "y": 140,
+      "type": "module",
+      "name": "Récepteur radio",
+      "role": "Transmet la consigne du pilote",
+      "visual_notes": "Module récepteur enfiché, marquage de référence lisible."
+    },
+    {
+      "id": "U3",
+      "x": 340,
+      "y": 290,
+      "type": "circuit_integre",
+      "name": "Microcontrôleur de vol",
+      "role": "Calcule et génère la commande PWM du moteur",
+      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U4",
+      "x": 150,
+      "y": 290,
+      "type": "circuit_integre",
+      "name": "Centrale inertielle",
+      "role": "Mesure l'attitude du drone",
+      "visual_notes": "Capteur en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "U5",
+      "x": 420,
+      "y": 400,
+      "type": "circuit_integre",
+      "name": "Pilote de grille",
+      "role": "Amplifie la commande PWM pour le MOSFET",
+      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+    },
+    {
+      "id": "R1",
+      "x": 580,
+      "y": 400,
+      "type": "resistance",
+      "name": "Résistance de grille",
+      "role": "Limite le courant de commande de grille",
+      "visual_notes": "Résistance traversante, marquage de référence lisible."
+    },
+    {
+      "id": "Q1",
+      "x": 740,
+      "y": 400,
+      "type": "transistor",
+      "name": "MOSFET de puissance",
+      "role": "Commute le courant du moteur",
+      "visual_notes": "Transistor en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "D1",
+      "x": 840,
+      "y": 320,
+      "type": "diode",
+      "name": "Diode de roue libre",
+      "role": "Protège des surtensions de commutation",
+      "visual_notes": "Diode traversante, marquage de référence lisible."
+    }
+  ],
+  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 14.8 V DC, 0.10 Vpp, clean ; TP2 : 14.8 V DC, 0.10 Vpp, clean ; TP3 : 14.8 V DC, 0.05 Vpp, clean ; TP4 : 5.00 V DC, 14.8 Vpp, clean ; TP5 : 5.00 V DC, 0.02 Vpp, clean ; TP6 : 3.30 V DC, 0.01 Vpp, clean ; TP7 : 1.65 V DC, 3.30 Vpp, clean ; TP8 : 1.65 V DC, 3.30 Vpp, clean ; TP9 : 1.65 V DC, 3.30 Vpp, clean ; TP10 : 1.65 V DC, 3.30 Vpp, clean ; TP11 : 6.00 V DC, 12.0 Vpp, clean ; TP12 : 6.00 V DC, 12.0 Vpp, clean ; TP13 : 7.40 V DC, 14.8 Vpp, clean ; TP14 : 0.20 V DC, 0.05 Vpp, clean. TP4 et TP7 à TP13 portent un signal commuté ou cadencé en fonctionnement normal : une amplitude élevée y est attendue.",
+  "table": {
+    "TP1": [
+      14.8,
+      0.1,
+      "clean"
+    ],
+    "TP2": [
+      11.0,
+      0.6,
+      "distorted"
+    ],
+    "TP3": [
+      11.0,
+      0.4,
+      "distorted"
+    ],
+    "TP4": [
+      5.0,
+      11.0,
+      "clean"
+    ],
+    "TP5": [
+      5.0,
+      0.02,
+      "clean"
+    ],
+    "TP6": [
+      3.3,
+      0.01,
+      "clean"
+    ],
+    "TP7": [
+      1.65,
+      3.3,
+      "clean"
+    ],
+    "TP8": [
+      1.65,
+      3.3,
+      "clean"
+    ],
+    "TP9": [
+      1.65,
+      3.3,
+      "clean"
+    ],
+    "TP10": [
+      1.65,
+      3.3,
+      "clean"
+    ],
+    "TP11": [
+      4.4,
+      8.8,
+      "distorted"
+    ],
+    "TP12": [
+      4.4,
+      8.8,
+      "distorted"
+    ],
+    "TP13": [
+      5.5,
+      11.0,
+      "distorted"
+    ],
+    "TP14": [
+      0.14,
+      0.4,
+      "distorted"
+    ]
+  },
+  "tours": [
+    {
+      "turn": 1,
+      "reasoning_before": "Symptôme moteur caractérisé en sortie, dichotomie engagée.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP13\"}",
+      "value_received": "{\"point_id\": \"TP13\", \"voltage_v\": 5.5, \"unit\": \"V\"}",
+      "reasoning_after": "Tension phase basse confirmée, je complète la caractérisation du symptôme.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 2,
+      "reasoning_before": "Tension phase basse confirmée, je complète la caractérisation du symptôme.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP13\"}",
+      "value_received": "{\"point_id\": \"TP13\", \"amplitude_vpp\": 11.0, \"quality\": \"distorted\"}",
+      "reasoning_after": "Sortie moteur dégradée en continu et en signal, je remonte la chaîne PWM par dichotomie.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 3,
+      "reasoning_before": "Sortie moteur dégradée en continu et en signal, je remonte la chaîne PWM par dichotomie.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP11\"}",
+      "value_received": "{\"point_id\": \"TP11\", \"amplitude_vpp\": 8.8, \"quality\": \"distorted\"}",
+      "reasoning_after": "Symptôme moteur à TP13 : DC 5,5 V (attendu 7,4 V) anormal, signal 11,0 Vpp distorted (attendu 14,8 Vpp clean) anormal. La sortie est dégradée en continu et en qualité. Je remonte la chaîne PWM par dichotomie vers l'amont.\nHYPOTHESES : FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 4,
+      "reasoning_before": "Anomalie déjà présente en amont à TP11, je continue la dichotomie vers le PWM.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP10\"}",
+      "value_received": "{\"point_id\": \"TP10\", \"amplitude_vpp\": 3.3, \"quality\": \"clean\"}",
+      "reasoning_after": "",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 5,
+      "reasoning_before": "",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP10\"}",
+      "value_received": "{\"point_id\": \"TP10\", \"voltage_v\": 1.65, \"unit\": \"V\"}",
+      "reasoning_after": "Sortie MCU nominale à TP10, sortie pilote anormale à TP11, je vérifie l'alimentation du pilote.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 6,
+      "reasoning_before": "Sortie MCU nominale à TP10, sortie pilote anormale à TP11, je vérifie l'alimentation du pilote.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"voltage_v\": 11.0, \"unit\": \"V\"}",
+      "reasoning_after": "TP10 nominal en DC 1,65 V et signal 3,30 Vpp clean : la commande MCU est bonne. TP11 anormal alors que son entrée est nominale, mais son alimentation TP3 = 11,0 V (attendu 14,8 V) est anormale : U5 subit donc sa condition d'alimentation. R1, Q1, D1 en aval d'une entrée déjà anormale subissent. La cause est en amont sur la chaîne d'alimentation.\nHYPOTHESES : FU1, C1",
+      "remaining_hypotheses": "FU1, C1"
+    },
+    {
+      "turn": 7,
+      "reasoning_before": "TP3 anormal à 11,0 V : dichotomie sur la chaîne d'alimentation pour isoler FU1 vs C1. Je mesure TP2.\nHYPOTHESES : FU1, C1",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP2\"}",
+      "value_received": "{\"point_id\": \"TP2\", \"voltage_v\": 11.0, \"unit\": \"V\"}",
+      "reasoning_after": "TP2 anormal à 11,0 V comme TP3 : premier point anormal possiblement TP2. Je vérifie l'entrée de FU1 à TP1 pour vérifier ses conditions.\nHYPOTHESES : FU1, C1",
+      "remaining_hypotheses": "FU1, C1"
+    },
+    {
+      "turn": 8,
+      "reasoning_before": "TP2 anormal à 11,0 V comme TP3 : premier point anormal possiblement TP2. Je vérifie l'entrée de FU1 à TP1 pour vérifier ses conditions.\nHYPOTHESES : FU1, C1",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP1\"}",
+      "value_received": "{\"point_id\": \"TP1\", \"voltage_v\": 14.8, \"unit\": \"V\"}",
+      "reasoning_after": "Faits mesurés : TP13 DC 5,5 V anormal et signal distorted, TP11 signal distorted anormal, TP10 DC 1,65 V et signal clean nominaux, TP3 DC 11,0 V anormal, TP2 DC 11,0 V anormal, TP1 DC 14,8 V nominal. Hypothèse : entrée FU1 nominale mais sortie dégradée, C1 en aval subit sans chute additionnelle TP2-TP3.\nHYPOTHESES : FU1\nDIAGNOSTIC : FU1, entrée TP1 nominale 14,8 V et première anomalie à TP2 11,0 V avec TP3 identique en aval, donc FU1 précède immédiatement la première anomalie d'alimentation ; test de confirmation recommandé : measure_voltage TP1 et TP2 pour confirmer la chute aux bornes de FU1.",
+      "remaining_hypotheses": "FU1"
+    }
+  ],
+  "diagnostic": "FU1",
+  "justification": ", entrée TP1 nominale 14,8 V et première anomalie à TP2 11,0 V avec TP3 identique en aval, donc FU1 précède immédiatement la première anomalie d'alimentation ; test de confirmation recommandé : measure_voltage TP1 et TP2 pour confirmer la chute aux bornes de FU1",
+  "nb_appels": 8,
+  "liaisons": [
+    [
+      "TP1",
+      "FU1"
+    ],
+    [
+      "FU1",
+      "TP2"
+    ],
+    [
+      "TP2",
+      "C1"
+    ],
+    [
+      "C1",
+      "TP3"
+    ],
+    [
+      "TP3",
+      "U1"
+    ],
+    [
+      "U1",
+      "TP4"
+    ],
+    [
+      "TP4",
+      "L1"
+    ],
+    [
+      "L1",
+      "TP5"
+    ],
+    [
+      "TP5",
+      "U2"
+    ],
+    [
+      "U2",
+      "TP6"
+    ],
+    [
+      "TP6",
+      "Y1"
+    ],
+    [
+      "Y1",
+      "TP7"
+    ],
+    [
+      "TP7",
+      "U3"
+    ],
+    [
+      "U3",
+      "TP6"
+    ],
+    [
+      "TP5",
+      "RX1"
+    ],
+    [
+      "RX1",
+      "TP9"
+    ],
+    [
+      "TP9",
+      "U3"
+    ],
+    [
+      "U4",
+      "TP8"
+    ],
+    [
+      "TP8",
+      "U3"
+    ],
+    [
+      "U3",
+      "TP10"
+    ],
+    [
+      "TP10",
+      "U5"
+    ],
+    [
+      "U5",
+      "TP11"
+    ],
+    [
+      "TP11",
+      "R1"
+    ],
+    [
+      "R1",
+      "TP12"
+    ],
+    [
+      "TP12",
+      "Q1"
+    ],
+    [
+      "Q1",
+      "TP13"
+    ],
+    [
+      "Q1",
+      "TP14"
+    ],
+    [
+      "TP13",
+      "D1"
+    ]
+  ]
+}

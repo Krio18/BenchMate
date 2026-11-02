@@ -1,0 +1,352 @@
+{
+  "dispositif": "une carte d'attaque de moteur à courant continu fictive",
+  "scenario": "H2",
+  "attendu": "U1",
+  "symptome": "Le moteur ne fonctionne pas correctement.",
+  "chaine": "Le circuit est une carte d'attaque de moteur à courant continu fictive : l'entrée 12 V traverse le fusible FU1 puis le condensateur d'entrée C1 vers le rail 12 V. Le rail 12 V alimente deux branches : la branche puissance, où le MOSFET Q1 commute le courant vers la sortie moteur mesurée par le shunt, et la branche logique, où le régulateur U1 et son condensateur de découplage C2 produisent un rail 5 V qui alimente le microcontrôleur U2, dont la sortie PWM passe par la résistance de grille R1 pour commander la grille de Q1. La diode de roue libre D1 est en parallèle du moteur.",
+  "points": [
+    {
+      "id": "TP1",
+      "x": 50,
+      "y": 70,
+      "name": "ENTREE_12V",
+      "description": "avant fusible"
+    },
+    {
+      "id": "TP2",
+      "x": 190,
+      "y": 70,
+      "name": "APRES_FUSIBLE",
+      "description": "après le fusible"
+    },
+    {
+      "id": "TP3",
+      "x": 330,
+      "y": 70,
+      "name": "RAIL_12V",
+      "description": "après le condensateur d'entrée"
+    },
+    {
+      "id": "TP4",
+      "x": 330,
+      "y": 160,
+      "name": "REG_IN",
+      "description": "entrée du régulateur"
+    },
+    {
+      "id": "TP5",
+      "x": 430,
+      "y": 250,
+      "name": "RAIL_5V",
+      "description": "sortie du régulateur"
+    },
+    {
+      "id": "TP6",
+      "x": 530,
+      "y": 250,
+      "name": "MCU_VCC",
+      "description": "alimentation du microcontrôleur"
+    },
+    {
+      "id": "TP7",
+      "x": 430,
+      "y": 330,
+      "name": "PWM_OUT",
+      "description": "sortie de commande du microcontrôleur"
+    },
+    {
+      "id": "TP8",
+      "x": 250,
+      "y": 330,
+      "name": "GRILLE_Q1",
+      "description": "grille du MOSFET"
+    },
+    {
+      "id": "TP9",
+      "x": 500,
+      "y": 70,
+      "name": "SORTIE_MOTEUR",
+      "description": "borne du moteur"
+    },
+    {
+      "id": "TP10",
+      "x": 500,
+      "y": 150,
+      "name": "SHUNT",
+      "description": "aux bornes du shunt de mesure de courant"
+    }
+  ],
+  "composants": [
+    {
+      "id": "FU1",
+      "x": 120,
+      "y": 70,
+      "type": "fusible",
+      "name": "Fusible",
+      "role": "Protège l'entrée",
+      "visual_notes": "Fusible traversant, marquage de référence lisible."
+    },
+    {
+      "id": "C1",
+      "x": 260,
+      "y": 70,
+      "type": "condensateur",
+      "name": "Condensateur d'entrée",
+      "role": "Lisse la tension d'alimentation",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U1",
+      "x": 330,
+      "y": 250,
+      "type": "circuit_integre",
+      "name": "Régulateur 5 V",
+      "role": "Alimente la logique",
+      "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "C2",
+      "x": 430,
+      "y": 180,
+      "type": "condensateur",
+      "name": "Condensateur de découplage",
+      "role": "Stabilise le rail logique",
+      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+    },
+    {
+      "id": "U2",
+      "x": 530,
+      "y": 330,
+      "type": "circuit_integre",
+      "name": "Microcontrôleur",
+      "role": "Génère le signal de commande PWM",
+      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+    },
+    {
+      "id": "R1",
+      "x": 340,
+      "y": 330,
+      "type": "resistance",
+      "name": "Résistance de grille",
+      "role": "Limite le courant de commande de grille",
+      "visual_notes": "Résistance traversante, marquage de référence lisible."
+    },
+    {
+      "id": "Q1",
+      "x": 420,
+      "y": 70,
+      "type": "transistor",
+      "name": "MOSFET de puissance",
+      "role": "Commute le courant moteur",
+      "visual_notes": "Transistor en boîtier standard, marquage de référence lisible."
+    },
+    {
+      "id": "D1",
+      "x": 460,
+      "y": 20,
+      "type": "diode",
+      "name": "Diode de roue libre",
+      "role": "Protège des surtensions de commutation",
+      "visual_notes": "Diode traversante, marquage de référence lisible."
+    }
+  ],
+  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 12.0 V DC, 0.05 Vpp, clean ; TP2 : 12.0 V DC, 0.05 Vpp, clean ; TP3 : 12.0 V DC, 0.05 Vpp, clean ; TP4 : 12.0 V DC, 0.05 Vpp, clean ; TP5 : 5.00 V DC, 0.02 Vpp, clean ; TP6 : 5.00 V DC, 0.02 Vpp, clean ; TP7 : 2.50 V DC, 5.00 Vpp, clean ; TP8 : 2.50 V DC, 5.00 Vpp, clean ; TP9 : 6.00 V DC, 12.0 Vpp, clean ; TP10 : 0.15 V DC, 0.05 Vpp, clean. TP7, TP8 et TP9 portent un signal commuté en fonctionnement normal : une amplitude élevée y est attendue.",
+  "table": {
+    "TP1": [
+      12.0,
+      0.05,
+      "clean"
+    ],
+    "TP2": [
+      12.0,
+      0.05,
+      "clean"
+    ],
+    "TP3": [
+      12.0,
+      0.05,
+      "clean"
+    ],
+    "TP4": [
+      12.0,
+      0.05,
+      "clean"
+    ],
+    "TP5": [
+      2.1,
+      0.02,
+      "clean"
+    ],
+    "TP6": [
+      2.1,
+      0.02,
+      "clean"
+    ],
+    "TP7": [
+      0.0,
+      0.0,
+      "silent"
+    ],
+    "TP8": [
+      0.0,
+      0.0,
+      "silent"
+    ],
+    "TP9": [
+      12.0,
+      0.0,
+      "silent"
+    ],
+    "TP10": [
+      0.0,
+      0.0,
+      "silent"
+    ]
+  },
+  "tours": [
+    {
+      "turn": 1,
+      "reasoning_before": "Je caractérise le symptôme à la sortie moteur avant de remonter la chaîne.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP9\"}",
+      "value_received": "{\"point_id\": \"TP9\", \"voltage_v\": 12.0, \"unit\": \"V\"}",
+      "reasoning_after": "Tension continue anormale en sortie ; je vérifie la qualité du signal pour cerner la grandeur en cause.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2, R1, Q1, D1"
+    },
+    {
+      "turn": 2,
+      "reasoning_before": "Tension continue anormale en sortie ; je vérifie la qualité du signal pour cerner la grandeur en cause.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP9\"}",
+      "value_received": "{\"point_id\": \"TP9\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
+      "reasoning_after": "Sortie à 12 V silencieux au lieu de 6 V commutés — le MOSFET semble bloqué. Je teste la commande PWM à mi-chaîne.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2, R1, Q1, D1"
+    },
+    {
+      "turn": 3,
+      "reasoning_before": "Sortie à 12 V silencieux au lieu de 6 V commutés — le MOSFET semble bloqué. Je teste la commande PWM à mi-chaîne.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP7\"}",
+      "value_received": "{\"point_id\": \"TP7\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
+      "reasoning_after": "Faits mesurés : TP9 = 12,0 V DC (attendu 6,0 V) donc DC anormal, et 0,0 Vpp silent (attendu 12,0 Vpp clean) donc signal absent. TP7 = 0,0 Vpp silent (attendu 5,0 Vpp clean) donc commande absente déjà en sortie MCU. Hypothèse : la sortie bloquée à 12V s'explique par Q1 bloqué faute de commande, donc cause en amont de TP7, pas en aval.\nHYPOTHESES : FU1, C1, U1, C2, U2\nJe caractérise TP7 en DC pour savoir si l'anomalie y est DC ou seulement signal.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2"
+    },
+    {
+      "turn": 4,
+      "reasoning_before": "La commande MCU est déjà silencieuse ; je mesure sa tension continue pour qualifier le défaut.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP7\"}",
+      "value_received": "{\"point_id\": \"TP7\", \"voltage_v\": 0.0, \"unit\": \"V\"}",
+      "reasoning_after": "Sortie MCU à 0 V sans commutation : je vérifie l'alimentation 5 V à mi-chaîne pour situer la panne.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2"
+    },
+    {
+      "turn": 5,
+      "reasoning_before": "Sortie MCU à 0 V sans commutation : je vérifie l'alimentation 5 V à mi-chaîne pour situer la panne.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP5\"}",
+      "value_received": "{\"point_id\": \"TP5\", \"voltage_v\": 2.1, \"unit\": \"V\"}",
+      "reasoning_after": "Rail 5 V effondré à 2,1 V, j'explore l'entrée du régulateur pour remonter vers l'alimentation.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2"
+    },
+    {
+      "turn": 6,
+      "reasoning_before": "Rail 5 V effondré à 2,1 V, j'explore l'entrée du régulateur pour remonter vers l'alimentation.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP4\"}",
+      "value_received": "{\"point_id\": \"TP4\", \"voltage_v\": 12.0, \"unit\": \"V\"}",
+      "reasoning_after": "Rail effondré en sortie régulateur avec entrée nominale ; je vérifie l'alimentation du microcontrôleur pour statuer sur son implication.",
+      "remaining_hypotheses": "FU1, C1, U1, C2, U2"
+    },
+    {
+      "turn": 7,
+      "reasoning_before": "Rail effondré en sortie régulateur avec entrée nominale ; je vérifie l'alimentation du microcontrôleur pour statuer sur son implication.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP6\"}",
+      "value_received": "{\"point_id\": \"TP6\", \"voltage_v\": 2.1, \"unit\": \"V\"}",
+      "reasoning_after": "Faits mesurés : TP9 DC 12,0V anormal (attendu 6,0V) et signal 0,0 Vpp silent (attendu 12,0 clean) ; TP7 signal 0,0 silent (attendu 5,0 clean) et DC 0,0V (attendu 2,5V) ; TP5 DC 2,1V anormal (attendu 5,00V) ; TP4 DC 12,0V nominal ; TP6 DC 2,1V anormal (attendu 5,00V). TP4 nominal implique que l'amont FU1-C1 est nominal. Première anomalie dans le sens de l'alimentation : TP5 bas alors que son entrée TP4 est nominale. TP6, TP7, TP9 anormaux en aval subissent et n'accusent pas U2, R1, Q1, D1. C2 en aval du point TP5 subit aussi.\nHYPOTHESES : U1\nDIAGNOSTIC : U1, entrée REG_IN TP4 nominale 12V donc conditions nominales, sortie RAIL_5V TP5 à 2,1V au lieu de 5V donc dégrade en conditions nominales, aval effondré en conséquence. Test de confirmation recommandé : isoler la charge aval du rail 5V et vérifier que TP5 reste bas à 2,1V.",
+      "remaining_hypotheses": "U1"
+    }
+  ],
+  "diagnostic": "U1",
+  "justification": ", entrée REG_IN TP4 nominale 12V donc conditions nominales, sortie RAIL_5V TP5 à 2,1V au lieu de 5V donc dégrade en conditions nominales, aval effondré en conséquence. Test de confirmation recommandé : isoler la charge aval du rail 5V et vérifier que TP5 reste bas à 2,1V",
+  "nb_appels": 7,
+  "liaisons": [
+    [
+      "TP1",
+      "FU1"
+    ],
+    [
+      "FU1",
+      "TP2"
+    ],
+    [
+      "TP2",
+      "C1"
+    ],
+    [
+      "C1",
+      "TP3"
+    ],
+    [
+      "TP3",
+      "Q1"
+    ],
+    [
+      "Q1",
+      "TP9"
+    ],
+    [
+      "TP9",
+      "TP10"
+    ],
+    [
+      "Q1",
+      "D1"
+    ],
+    [
+      "D1",
+      "TP9"
+    ],
+    [
+      "TP3",
+      "TP4"
+    ],
+    [
+      "TP4",
+      "U1"
+    ],
+    [
+      "U1",
+      "TP5"
+    ],
+    [
+      "TP5",
+      "C2"
+    ],
+    [
+      "TP5",
+      "TP6"
+    ],
+    [
+      "TP6",
+      "U2"
+    ],
+    [
+      "U2",
+      "TP7"
+    ],
+    [
+      "TP7",
+      "R1"
+    ],
+    [
+      "R1",
+      "TP8"
+    ],
+    [
+      "TP8",
+      "Q1"
+    ]
+  ]
+}
