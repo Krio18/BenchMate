@@ -51,16 +51,13 @@ EXPECTED = {
     },
 }
 
-# Noms et roles recopies de SPEC.md section 5.
+# Names and roles copied from SPEC.md section 5.
 EXPECTED_NAMES = {
-    "C1": ("Condensateur d'entr\u00e9e", "Couple le signal d'entr\u00e9e"),
-    "R1": (
-        "R\u00e9seau de polarisation",
-        "\u00c9tablit la r\u00e9f\u00e9rence de polarisation",
-    ),
-    "U1": ("Amplificateur op\u00e9rationnel", "Amplifie le signal"),
-    "C2": ("Condensateur de sortie", "Couple le signal vers la sortie"),
-    "PS1": ("Alimentation", "Fournit le rail d'alimentation"),
+    "C1": ("Input capacitor", "Couples the input signal"),
+    "R1": ("Bias network", "Establishes the bias reference"),
+    "U1": ("Operational amplifier", "Amplifies the signal"),
+    "C2": ("Output capacitor", "Couples the signal to the output"),
+    "PS1": ("Power supply", "Provides the supply rail"),
 }
 
 

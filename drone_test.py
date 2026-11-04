@@ -51,7 +51,7 @@ def test_une_seule_panne_par_scenario_et_cle_de_correction():
 def test_fiche_nominale_egale_au_scenario_sain():
     d = charger_dispositif(DRONE)
     for tp, (v, a, q) in d["scenarios"]["sain"].items():
-        attendu = f"{tp} : {v:.2f} V DC" if v < 10 else f"{tp} : {v:.1f} V DC"
+        attendu = f"{tp}: {v:.2f} V DC" if v < 10 else f"{tp}: {v:.1f} V DC"
         assert attendu in d["nominal"], tp
         assert (f"{a:.2f} Vpp, {q}" if a < 10 else f"{a:.1f} Vpp, {q}") in d["nominal"], tp
 
@@ -64,9 +64,9 @@ def test_contexte_sans_fuite_pannes():
                  "j1", "j2", "j3", "j4", "j5", "j6", "sain", "quartz arrêté", "fatigué", "saturée"]
     for token in interdits:
         assert token not in blob, token
-    for attendu in ["fiche technique", "tp4 : 5.00 v dc, 14.8 vpp, clean",
-                    "tp7 : 1.65 v dc, 3.30 vpp, clean", "tp14 : 0.20 v dc, 0.05 vpp, clean",
-                    "cadencé par l'horloge de y1", "l'inductance l1"]:
+    for attendu in ["manufacturer datasheet", "tp4: 5.00 v dc, 14.8 vpp, clean",
+                    "tp7: 1.65 v dc, 3.30 vpp, clean", "tp14: 0.20 v dc, 0.05 vpp, clean",
+                    "clocked by the y1 clock", "inductor l1"]:
         assert attendu in blob, attendu
     assert '"liaisons"' not in blob and '"x": 40' not in blob
     for c in charger_dispositif(DRONE)["components"]:

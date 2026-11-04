@@ -1,56 +1,56 @@
-"""Contexte initial de l'agent, construit depuis le dispositif.
+"""Agent initial context, built from the device.
 
-Consigne systeme generique (nom et composants injectes, sans reference
-a un dispositif particulier), description du circuit, points, outils,
-fiche nominale, symptome. Aucune valeur de panne, aucune liste de
-pannes, aucune instruction d'appel d'outil. Defaut : preamplificateur.
+Generic system prompt (name and components injected, with no reference
+to any particular device), circuit description, points, tools,
+nominal datasheet, symptom. No fault values, no fault list, no
+tool-call instruction. Default: preamplifier.
 """
 
 from simulator import charger_dispositif
 
 SYSTEME_TEMPLATE = (
-    "Tu es un agent de diagnostic sur {name}. "
-    "Tu raisonnes par hypotheses : plusieurs composants peuvent expliquer la panne, "
-    "et tu revises tes hypotheses a chaque resultat recu. "
-    "Tu distingues les faits mesures de tes hypotheses, et tu ne pretends jamais "
-    "avoir effectue un test sans appel d'outil. "
-    "Dans chacune de tes reponses, sans exception, fais figurer une ligne "
-    'commencant par "HYPOTHESES : " avec la liste des composants encore plausibles, '
-    "meme si cette liste est identique a celle de ta precedente reponse. Quand ton diagnostic "
-    'est final, termine par une ligne commencant par "DIAGNOSTIC : " suivie d\'un seul '
-    "identifiant ({cids}), de ta justification et d'un test de confirmation recommande. "
-    "Une anomalie en amont rend anormal tout ce qui se trouve en aval. Le composant fautif est celui "
-    "qui precede immediatement la premiere anomalie dans le sens du signal, ou dans celui de l'alimentation. "
-    "Un point anormal dont l'entree est deja anormale n'accuse pas son propre composant : il subit. "
-    "Cherche donc le premier point anormal de la chaine plutot que d'enumerer tous les points anormaux. "
-    "Commence par caracteriser le symptome la ou il se manifeste pour savoir quelle "
-    "grandeur est en cause : tension continue, amplitude, ou qualite du signal. Puis remonte la chaine "
-    "par dichotomie : mesure un point au milieu, et selon qu'il est nominal ou non, cherche en amont ou "
-    "en aval. Ne balaie pas les points dans l'ordre. Ne mesure que la grandeur pertinente. Si la "
-    "sortie montre un signal degrade alors que sa tension continue est nominale, le defaut est sur le "
-    "signal : inutile de relever la tension continue de chaque point. "
-    "Avant de designer un composant comme fautif, verifie que ses conditions de fonctionnement sont "
-    "nominales : sa tension d'alimentation, et la tension continue a son entree. Un composant en "
-    "conditions nominales qui degrade le signal est fautif. Un composant en conditions anormales ne "
-    "fait que subir - la cause est alors en amont, et c'est elle qu'il faut designer. Cette verification "
-    "ne se saute jamais, meme quand le symptome ne porte que sur le signal. "
-    "Des qu'une seule hypothese subsiste et qu'elle est etayee par tes mesures, conclus immediatement "
-    "par DIAGNOSTIC, sans mesure de confirmation supplementaire. "
-    "Tu ne demandes qu'un seul outil a la fois, et tu attends son resultat avant de decider du suivant."
+    "You are a diagnosis agent for {name}. "
+    "You reason through hypotheses: several components may explain the fault, "
+    "and you revise your hypotheses with each result received. "
+    "You distinguish measured facts from your hypotheses, and you never claim "
+    "to have run a test without a tool call. "
+    "In each of your responses, without exception, include a line "
+    'starting with "HYPOTHESES: " listing the components still plausible, '
+    "even if that list is identical to the one in your previous response. When your diagnosis "
+    'is final, end with a line starting with "DIAGNOSTIC: " followed by a single '
+    "identifier ({cids}), your justification, and a recommended confirmation test. "
+    "An upstream anomaly makes everything downstream abnormal. The faulty component is the one "
+    "immediately preceding the first anomaly in the signal direction, or in the supply direction. "
+    "An abnormal point whose input is already abnormal does not accuse its own component: it suffers. "
+    "So look for the first abnormal point of the chain rather than listing every abnormal point. "
+    "Start by characterizing the symptom where it shows to know which "
+    "quantity is at stake: DC voltage, amplitude, or signal quality. Then walk back up the chain "
+    "by dichotomy: measure a point in the middle, and depending on whether it reads nominal or not, search "
+    "upstream or downstream. Do not sweep the points in order. Measure only the relevant quantity. If the "
+    "output shows a degraded signal while its DC voltage reads nominal, the defect is on the "
+    "signal: no need to take the DC voltage of each point. "
+    "Before naming a component as faulty, check that its operating conditions read "
+    "nominal: its supply voltage, and the DC voltage at its input. A component under "
+    "nominal conditions that degrades the signal is faulty. A component under abnormal conditions merely "
+    "suffers - the cause is then upstream, and that is what must be named. This check "
+    "is never skipped, even when the symptom concerns only the signal. "
+    "As soon as a single hypothesis remains and it is supported by your measurements, conclude immediately "
+    "with DIAGNOSTIC, with no further confirmation measurement. "
+    "You request a single tool at a time, and you wait for its result before deciding on the next one."
 )
 
 def _tool(name, desc, arg, ids):
     return {"type": "function", "function": {
         "name": name, "description": desc, "parameters": {"type": "object",
         "properties": {arg: {"type": "string",
-        "description": "Identifiant : " + ", ".join(ids) + "."}},
+        "description": "Identifier: " + ", ".join(ids) + "."}},
         "required": [arg], "additionalProperties": False}}}
 
 
 def _enumeration(ids):
     if len(ids) < 2:
         return "".join(ids)
-    return ", ".join(ids[:-1]) + " ou " + ids[-1]
+    return ", ".join(ids[:-1]) + " or " + ids[-1]
 
 
 def construire_contexte(dispositif=None):
@@ -58,24 +58,24 @@ def construire_contexte(dispositif=None):
     pids = [p["id"] for p in d["points"]]
     cids = [c["id"] for c in d["components"]]
     systeme = SYSTEME_TEMPLATE.format(name=d["name"], cids=_enumeration(cids))
-    points = " ; ".join(f"{p['id']} ({p['name']}) : {p['description']}" for p in d["points"]) + "."
-    outils = (f"inspect_component (metadonnees statiques, independantes de l'etat du circuit : {', '.join(cids)}), "
-              f"measure_voltage (tension DC en volts : {', '.join(pids)}), "
-              f"test_signal (amplitude et qualite du signal : {', '.join(pids)}).")
+    points = " ; ".join(f"{p['id']} ({p['name']}): {p['description']}" for p in d["points"]) + "."
+    outils = (f"inspect_component (static metadata, independent of the circuit state: {', '.join(cids)}), "
+              f"measure_voltage (DC voltage in volts: {', '.join(pids)}), "
+              f"test_signal (signal amplitude and quality: {', '.join(pids)}).")
     user = (f"{d['chain']}\n"
-            f"Points de mesure : {points}\n"
-            f"Outils disponibles : {outils}\n"
+            f"Measurement points: {points}\n"
+            f"Available tools: {outils}\n"
             f"{d['nominal']}\n"
-            f"Symptome rapporte : << {d['symptom']} >>")
+            f"Reported symptom: \"{d['symptom']}\"")
     tools = [
         _tool("inspect_component",
-              "Metadonnees statiques : reference, role, aspect visuel. Identiques quel que soit l'etat du circuit ; ne revele jamais l'etat electrique d'un composant.",
+              "Static metadata: reference, role, visual aspect. Identical whatever the circuit state; never reveals the electrical state of a component.",
               "component_id", cids),
         _tool("measure_voltage",
-              "Tension continue (DC) en volts sur un point de mesure.",
+              "DC voltage in volts on a measurement point.",
               "point_id", pids),
         _tool("test_signal",
-              "Amplitude crete-a-crete en volts et qualite du signal.",
+              "Peak-to-peak amplitude in volts and signal quality.",
               "point_id", pids),
     ]
     return systeme, user, tools

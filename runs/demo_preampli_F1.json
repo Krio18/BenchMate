@@ -1,44 +1,44 @@
 {
-  "dispositif": "un preamplificateur audio fictif",
+  "dispositif": "a fictitious audio preamplifier",
   "scenario": "F1",
   "attendu": "PS1",
-  "symptome": "La sortie audio ne sonne pas normalement.",
-  "chaine": "Le circuit est un preamplificateur audio fictif : le signal entre par le condensateur d'entree C1, traverse le reseau de polarisation R1 puis l'amplificateur operationnel U1, et ressort par le condensateur de sortie C2 vers la sortie audio. L'alimentation PS1 fournit le rail 9 V a l'ensemble du circuit.",
+  "symptome": "The audio output does not sound right.",
+  "chaine": "The circuit is a fictitious audio preamplifier: the signal enters through input capacitor C1, passes through bias network R1 and operational amplifier U1, and exits through output capacitor C2 to the audio output. Power supply PS1 provides the 9 V rail to the whole circuit.",
   "points": [
     {
       "id": "TP1",
       "x": 70,
       "y": 100,
       "name": "SUPPLY_9V",
-      "description": "rail d'alimentation"
+      "description": "supply rail"
     },
     {
       "id": "TP2",
       "x": 185,
       "y": 100,
       "name": "BIAS_REF",
-      "description": "reference de polarisation"
+      "description": "bias reference"
     },
     {
       "id": "TP3",
       "x": 300,
       "y": 100,
       "name": "AMP_INPUT",
-      "description": "entree amplificateur"
+      "description": "amplifier input"
     },
     {
       "id": "TP4",
       "x": 415,
       "y": 100,
       "name": "AMP_OUTPUT",
-      "description": "sortie amplificateur"
+      "description": "amplifier output"
     },
     {
       "id": "TP5",
       "x": 530,
       "y": 100,
       "name": "AUDIO_OUT",
-      "description": "sortie audio apres condensateur de liaison"
+      "description": "audio output after coupling capacitor"
     }
   ],
   "composants": [
@@ -47,48 +47,48 @@
       "x": 185,
       "y": 280,
       "type": "condensateur",
-      "name": "Condensateur d'entrée",
-      "role": "Couple le signal d'entrée",
-      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+      "name": "Input capacitor",
+      "role": "Couples the input signal",
+      "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."
     },
     {
       "id": "R1",
       "x": 300,
       "y": 280,
       "type": "resistance",
-      "name": "Réseau de polarisation",
-      "role": "Établit la référence de polarisation",
-      "visual_notes": "Réseau de résistances traversant, marquage de référence lisible."
+      "name": "Bias network",
+      "role": "Establishes the bias reference",
+      "visual_notes": "Through-hole resistor network, legible reference marking."
     },
     {
       "id": "U1",
       "x": 415,
       "y": 280,
       "type": "circuit_integre",
-      "name": "Amplificateur opérationnel",
-      "role": "Amplifie le signal",
-      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+      "name": "Operational amplifier",
+      "role": "Amplifies the signal",
+      "visual_notes": "Through-hole integrated circuit, legible reference marking."
     },
     {
       "id": "C2",
       "x": 530,
       "y": 280,
       "type": "condensateur",
-      "name": "Condensateur de sortie",
-      "role": "Couple le signal vers la sortie",
-      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+      "name": "Output capacitor",
+      "role": "Couples the signal to the output",
+      "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."
     },
     {
       "id": "PS1",
       "x": 70,
       "y": 280,
       "type": "module",
-      "name": "Alimentation",
-      "role": "Fournit le rail d'alimentation",
-      "visual_notes": "Module d'alimentation, marquage de référence lisible."
+      "name": "Power supply",
+      "role": "Provides the supply rail",
+      "visual_notes": "Power supply module, legible reference marking."
     }
   ],
-  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 9.0 V DC, 0.0 Vpp, silent ; TP2 : 4.5 V DC, 0.0 Vpp, silent ; TP3 : 4.5 V DC, 0.2 Vpp, clean ; TP4 : 4.5 V DC, 2.0 Vpp, clean ; TP5 : 0.0 V DC, 2.0 Vpp, clean.",
+  "nominale": "Manufacturer datasheet, normal operation: TP1: 9.0 V DC, 0.0 Vpp, silent; TP2: 4.5 V DC, 0.0 Vpp, silent; TP3: 4.5 V DC, 0.2 Vpp, clean; TP4: 4.5 V DC, 2.0 Vpp, clean; TP5: 0.0 V DC, 2.0 Vpp, clean.",
   "table": {
     "TP1": [
       5.2,
@@ -119,53 +119,71 @@
   "tours": [
     {
       "turn": 1,
-      "reasoning_before": "Je commence par caractériser le symptôme en sortie pour identifier la grandeur en cause.",
+      "reasoning_before": "Characterizing the output symptom to target the right quantity.",
       "tool": "test_signal",
       "argument": "{\"point_id\":\"TP5\"}",
       "value_received": "{\"point_id\": \"TP5\", \"amplitude_vpp\": 0.4, \"quality\": \"distorted\"}",
-      "reasoning_after": "Sortie dégradée en signal, je vérifie sa tension continue pour cerner la panne.",
+      "reasoning_after": "Output shows weak distorted sound — I'll verify if the DC condition is also off.",
       "remaining_hypotheses": "C1, R1, U1, C2, PS1"
     },
     {
       "turn": 2,
-      "reasoning_before": "Sortie dégradée en signal, je vérifie sa tension continue pour cerner la panne.",
+      "reasoning_before": "Output shows weak distorted sound — I'll verify if the DC condition is also off.",
       "tool": "measure_voltage",
       "argument": "{\"point_id\":\"TP5\"}",
       "value_received": "{\"point_id\": \"TP5\", \"voltage_v\": 0.0, \"unit\": \"V\"}",
-      "reasoning_after": "Fait mesuré : TP5 DC 0,0 V nominale, mais signal 0,4 Vpp distordu au lieu de 2,0 Vpp clean. Le défaut est donc sur le signal, pas sur la tension continue. Je remonte par dichotomie au milieu de la chaîne signal : TP4.\n\nHYPOTHESES : C1, R1, U1, C2, PS1",
+      "reasoning_after": "TP5 shows degraded signal 0.4 Vpp distorted vs 2.0 clean, while DC is nominal 0.0V. So the fault is on signal, not DC. Walking back by dichotomy to the middle of the signal chain (TP3) rather than sweeping in order.\nHYPOTHESES: C1, R1, U1, C2, PS1",
       "remaining_hypotheses": "C1, R1, U1, C2, PS1"
     },
     {
       "turn": 3,
-      "reasoning_before": "Fait mesuré : TP5 DC 0,0 V nominale, mais signal 0,4 Vpp distordu au lieu de 2,0 Vpp clean. Le défaut est donc sur le signal, pas sur la tension continue. Je remonte par dichotomie au milieu de la chaîne signal : TP4.\n\nHYPOTHESES : C1, R1, U1, C2, PS1",
+      "reasoning_before": "TP5 shows degraded signal 0.4 Vpp distorted vs 2.0 clean, while DC is nominal 0.0V. So the fault is on signal, not DC. Walking back by dichotomy to the middle of the signal chain (TP3) rather than sweeping in order.\nHYPOTHESES: C1, R1, U1, C2, PS1",
       "tool": "test_signal",
-      "argument": "{\"point_id\":\"TP4\"}",
-      "value_received": "{\"point_id\": \"TP4\", \"amplitude_vpp\": 0.5, \"quality\": \"distorted\"}",
-      "reasoning_after": "TP4 est anormal, donc C2 subit. Je remonte en amont par dichotomie sur le signal.",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"amplitude_vpp\": 0.2, \"quality\": \"clean\"}",
+      "reasoning_after": "TP3 signal is nominal, so the input side is clear — next I'll probe mid-chain to isolate the stage.",
       "remaining_hypotheses": "C1, R1, U1, C2, PS1"
     },
     {
       "turn": 4,
-      "reasoning_before": "TP4 est anormal, donc C2 subit. Je remonte en amont par dichotomie sur le signal.",
+      "reasoning_before": "TP3 signal is nominal, so the input side is clear — next I'll probe mid-chain to isolate the stage.",
       "tool": "test_signal",
-      "argument": "{\"point_id\":\"TP3\"}",
-      "value_received": "{\"point_id\": \"TP3\", \"amplitude_vpp\": 0.2, \"quality\": \"clean\"}",
-      "reasoning_after": "TP3 signal nominal isole le défaut entre TP3 et TP4. Je vérifie les conditions d'U1 en commençant par son alimentation.",
+      "argument": "{\"point_id\":\"TP4\"}",
+      "value_received": "{\"point_id\": \"TP4\", \"amplitude_vpp\": 0.5, \"quality\": \"distorted\"}",
+      "reasoning_after": "Input side signal is good but output is bad — checking the supply and bias conditions.",
       "remaining_hypotheses": "C1, R1, U1, C2, PS1"
     },
     {
       "turn": 5,
-      "reasoning_before": "TP3 signal nominal isole le défaut entre TP3 et TP4. Je vérifie les conditions d'U1 en commençant par son alimentation.",
+      "reasoning_before": "Input side signal is good but output is bad — checking the supply and bias conditions.",
       "tool": "measure_voltage",
       "argument": "{\"point_id\":\"TP1\"}",
       "value_received": "{\"point_id\": \"TP1\", \"voltage_v\": 5.2, \"unit\": \"V\"}",
-      "reasoning_after": "Faits mesurés : TP5 DC 0.0 V nominale mais signal 0.4 Vpp distordu au lieu de 2.0 Vpp clean -> défaut sur le signal. Dichotomie signal : TP4 0.5 Vpp distordu anormal, TP3 0.2 Vpp clean nominal -> première anomalie signal entre TP3 et TP4, donc C2 subit et est éliminé, C1/R1 avec TP3 nominal n'ont pas dégradé le signal. Vérification conditions de U1 jamais sautée : alimentation TP1 mesurée à 5.2 V au lieu de 9.0 V anormale, donc U1 en conditions anormales ne fait que subir. La cause est en amont. TP1 premier point anormal de la chaîne d'alimentation, précédé immédiatement par PS1.\n\nHYPOTHESES : PS1\nDIAGNOSTIC : PS1, rail TP1 à 5.2V au lieu de 9V rend U1 incapable de fournir 2.0Vpp clean malgré entrée TP3 nominale, test de confirmation recommandé : vérifier PS1 à vide/en charge puis remplacement.",
+      "reasoning_after": "Supply reads low with clean input but distorted output — I'll check the operating conditions to find the first anomaly.",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 6,
+      "reasoning_before": "Supply reads low with clean input but distorted output — I'll check the operating conditions to find the first anomaly.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP3\"}",
+      "value_received": "{\"point_id\": \"TP3\", \"voltage_v\": 2.6, \"unit\": \"V\"}",
+      "reasoning_after": "First signal anomaly is at amp output with bad supply and bias — checking bias reference to narrow the cause.",
+      "remaining_hypotheses": "C1, R1, U1, C2, PS1"
+    },
+    {
+      "turn": 7,
+      "reasoning_before": "First signal anomaly is at amp output with bad supply and bias — checking bias reference to narrow the cause.",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP2\"}",
+      "value_received": "{\"point_id\": \"TP2\", \"voltage_v\": 2.6, \"unit\": \"V\"}",
+      "reasoning_after": "Measured facts show TP5 signal degraded (0.4 Vpp distorted vs 2.0 clean) while DC is nominal (0.0V), so fault is on signal. Dichotomy on signal: TP3 signal nominal (0.2 Vpp clean) eliminates upstream C1, TP4 signal abnormal (0.5 Vpp distorted) is first signal anomaly, accusing U1 stage. Check of operating conditions: U1 supply TP1=5.2V vs 9.0V nominal abnormal, input DC TP3=2.6V vs 4.5V abnormal, bias TP2=2.6V vs 4.5V abnormal tracking supply/2, so U1 merely suffers. First abnormal in supply direction is TP1, whose source is PS1; downstream R1, U1, C2 all suffer from already-abnormal input.\nHYPOTHESES: PS1\nDIAGNOSTIC: PS1 - supply rail TP1 low at 5.2V explains proportional bias drop and distorted low gain, with nominal signal at TP3 and degraded signal from TP4 onward; recommended confirmation test: substitute known-good 9V supply for PS1 and verify TP1 returns to 9.0V and TP4/TP5 return to 2.0 Vpp clean.",
       "remaining_hypotheses": "PS1"
     }
   ],
   "diagnostic": "PS1",
-  "justification": ", rail TP1 à 5.2V au lieu de 9V rend U1 incapable de fournir 2.0Vpp clean malgré entrée TP3 nominale, test de confirmation recommandé : vérifier PS1 à vide/en charge puis remplacement",
-  "nb_appels": 5,
+  "justification": "supply rail TP1 low at 5.2V explains proportional bias drop and distorted low gain, with nominal signal at TP3 and degraded signal from TP4 onward; recommended confirmation test: substitute known-good 9V supply for PS1 and verify TP1 returns to 9.0V and TP4/TP5 return to 2.0 Vpp clean",
+  "nb_appels": 7,
   "liaisons": [
     [
       "TP1",

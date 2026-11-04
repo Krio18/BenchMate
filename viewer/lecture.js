@@ -21,17 +21,17 @@ BM.demarrer = libs => {
     BM.scene.init(libs); BM.effets.init(); BM.scene.boucle(BM.banc.animer);
     document.body.classList.add("sans-eti"); BM.banc.prechauffer();
     BM.banc.construire(BM.preparer(vitrine), true); // le dernier banc en vitrine
-  } catch (e) { console.error(e); return BM.erreur("La scène 3D n'a pas pu démarrer : " + e.message); }
+  } catch (e) { console.error(e); return BM.erreur("The 3D scene could not start: " + e.message); }
   BM.scene.boucle((dt, dj) => tick(dj)); BM.scene.surSurvol = BM.panneau.survol;
   lier(); regler("vide"); BM.pret = true; document.body.classList.add("pret");
   if (s && s.texte) { const b = $("bReprendre"); b.hidden = false; b.querySelector("span").textContent = s.nom; b.onclick = () => charger(s.texte, s.nom); }
 };
 
 function charger(texte, nom) {
-  let j; try { j = JSON.parse(texte); } catch { return BM.erreur(`${nom} : fichier JSON illisible.`); }
+  let j; try { j = JSON.parse(texte); } catch { return BM.erreur(`${nom}: unreadable JSON file.`); }
   if (!Array.isArray(j.tours) || !Array.isArray(j.points) || !Array.isArray(j.composants))
-    return BM.erreur(`${nom} : ce n'est pas un journal de passage BenchMate.`);
-  $("erreur").hidden = true; $("bOuvrir").title = nom + " — ouvrir un autre journal (O)";
+    return BM.erreur(`${nom}: this is not a BenchMate run log.`);
+  $("erreur").hidden = true; $("bOuvrir").title = nom + " — open another log (O)";
   try { localStorage.setItem(CLE, JSON.stringify({nom, texte})); } catch {}
   D = BM.preparer(j); prog = null; cur = 0;
   document.body.classList.add("charge");

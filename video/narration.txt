@@ -1,0 +1,71 @@
+# BenchMate — narration
+# Voix : en-US-AndrewMultilingualNeural, débit -10%
+# Un fichier audio par segment. PAUSE = silence à insérer APRÈS le segment.
+
+[01] (~15 s)
+This is an agent looking for a fault on a circuit board. It does not know where the fault is. And when it is done, we can check whether it was right.
+PAUSE 1.0
+
+[02] (~19 s)
+Here is the rule. A deterministic simulator holds the truth. It knows the fault. The agent does not. It only gets a symptom, the manufacturer's datasheet, and three measurement tools.
+PAUSE 0.8
+
+[03] (~9 s)
+Every value it sees comes from the simulator. The model cannot invent a measurement. That is what makes every diagnosis verifiable.
+PAUSE 1.5
+
+[04] (~7 s)
+Fourteen test points. Thirteen components. Two branches. The agent has never seen this board.
+PAUSE 3.0
+
+[05] (~3 s)
+The motor line is silent.
+PAUSE 4.0
+
+[06] (~5 s)
+But the DC voltage is there. So the board is powered.
+PAUSE 4.0
+
+[07] (~7 s)
+The control signal from the microcontroller is silent too. Four components drop out.
+PAUSE 4.0
+
+[08] (~5 s)
+It goes further up the chain. The clock is silent as well.
+PAUSE 4.0
+
+[09] (~10 s)
+And now the important part. Before accusing the oscillator, it checks its supply. Three point three volts. Nominal.
+PAUSE 2.0
+
+[10] (~12 s)
+So the oscillator has everything it needs, and still produces nothing. Verdict: the crystal oscillator. Thirteen hypotheses down to one, in seven measurements.
+PAUSE 1.2
+
+[11] (~4 s)
+The real fault was the crystal oscillator.
+PAUSE 2.0
+
+[12] (~25 s)
+Two more runs, on a different board. Watch the measurements. Clean here. Distorted there. Exactly the same signal readings, in both runs. But one ends on the amplifier, and the other ends on the power supply. Because before concluding, the agent checked the supply rail. Nine volts in one case. Five point two in the other. Same symptom, same measurements, different fault.
+PAUSE 1.5
+
+[13] (~22 s)
+Four boards. From five components to thirteen. Two of them with branching topologies. The agent's instructions contain no component name, no test point, no reference to any circuit. A test verifies that automatically. Adding a board means adding one data file. Nothing else. In production, the simulator is replaced by the real instrument. The agent does not change.
+PAUSE 1.5
+
+[14] (~26 s)
+One more thing, and it is the part I did not expect. The model on its own scored fifty percent. It always accused the component closest to the symptom. Three principles changed that. Propagation: the fault comes before the first anomaly, and everything after it only suffers. Bisection: start where the symptom shows, and cut the chain in half. And never condemn a component without checking its operating conditions.
+PAUSE 0.8
+
+[15] (~9 s)
+None of these are about electronics. They are how any technician eliminates. Each one fixed some faults and broke others. The measurement harness is what caught that.
+PAUSE 1.5
+
+[16] (~13 s)
+Two hundred diagnoses. Two hundred correct. Scored automatically, reproducible with one command. Muse Spark does all the reasoning. The simulator does all the measuring.
+PAUSE 0.8
+
+[17] (~5 s)
+Everything you have just seen was built during this hackathon.
+PAUSE 1.5

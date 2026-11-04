@@ -1,76 +1,76 @@
-# AGENT.md --- Règles de travail pour Muse Code
+# AGENT.md --- Working rules for Muse Code
 
-Lis intégralement `AGENT.md` et `SPEC.md` avant de commencer toute
-tâche. Ces fichiers sont le contrat du projet. En cas de conflit ou
-d'ambiguïté, arrête-toi et demande une clarification avant de modifier
-le code.
+Read `AGENT.md` and `SPEC.md` in full before starting any
+task. These files are the project contract. In case of conflict or
+ambiguity, stop and ask for clarification before modifying
+the code.
 
-Contexte initial de l’agent. L’agent reçoit, construits depuis le dispositif actif : une description textuelle du circuit (ses composants et leur rôle, l’ordre du signal), la liste des points de mesure avec leur nom, la liste des trois outils, la fiche technique nominale (tensions DC, amplitudes et qualités attendues en fonctionnement normal, c’est-à-dire le scénario sain du dispositif), et le symptôme rapporté. Il ne reçoit ni les tables des pannes, ni aucune mention de leur existence ou de leur nombre, ni la liste des pannes possibles. La consigne système, identique pour tous les dispositifs, lui impose en outre trois principes de raisonnement : propagation (le fautif précède la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l’accuser).
+Agent's initial context. The agent receives, built from the active device: a textual circuit description (its components and their role, the signal order), the list of measurement points with their names, the list of the three tools, the nominal datasheet (expected DC voltages, amplitudes, and qualities in normal operation, i.e. the device's healthy scenario), and the reported symptom. It receives neither the fault tables, nor any mention of their existence or count, nor the list of possible faults. The system prompt, identical for all devices, additionally imposes three reasoning principles: propagation (the culprit precedes the first anomaly), dichotomy (characterize the symptom at the output, then work back up by dichotomy on the relevant quantity), and operating-conditions check (supply and bias of the suspect before accusing it).
 
-## Règles obligatoires
+## Mandatory rules
 
-1.  **Stack autorisée :** Python pour le simulateur et l'agent ;
-    Three.js pour la scène 3D. N'ajoute aucune autre dépendance,
-    bibliothèque, framework ou service sans me demander d'abord.
-2.  **Une tâche à la fois :** travaille uniquement sur la tâche
-    explicitement demandée. Une fois terminée, lance les vérifications
-    pertinentes, résume les changements et attends mon accord. Ne
-    commence jamais la tâche suivante de toi-même.
-3.  **Limite de taille :** aucun fichier de code ne doit dépasser 200 lignes. Si
-    un fichier de code risque de dépasser cette limite, arrête-toi et propose
-    une découpe avant de continuer.
-4.  **Tests obligatoires :** toute fonction du simulateur doit être
-    accompagnée d'un test que je peux lancer. Donne la commande exacte
-    pour exécuter les tests. N'ajoute pas de dépendance de test sans
-    demander ; privilégie les outils de test standard déjà disponibles.
-5.  **Décisions d'architecture :** si une décision d'architecture, de
-    structure de projet, de protocole, de dépendance ou de contrat d'API
-    est nécessaire et n'est pas définie dans les spécifications,
-    arrête-toi et pose-moi la question. Ne décide pas à ma place.
-6.  **Pas de bibliothèque de simulation électronique :** le simulateur
-    est une table de valeurs prédéfinies. Il ne doit pas utiliser de
-    bibliothèque de simulation électronique ni essayer de modéliser
-    physiquement le circuit.
-7.  **Respect de `SPEC.md` :** ne change pas les dispositifs, leurs
-    pannes, leurs points de mesure, les trois outils, leurs signatures
-    ou leurs structures de retour sans mon autorisation explicite.
-8.  **Le simulateur fait autorité :** le modèle ne doit jamais inventer
-    une mesure. Les tensions, amplitudes et états de signal sont lus
-    dans la table du scénario actif.
-9.  **Pas de fuite du scénario :** l'agent ne doit pas recevoir
-    l'identifiant de la panne active ni un indicateur révélant le
-    composant défectueux.
-10. **Pas de fausse réussite :** ne prétends pas qu'un test a réussi si
-    tu ne l'as pas exécuté. Signale clairement les tests non exécutés et
-    les limitations rencontrées.
-11. **Changements minimaux :** ne refactorise pas le code sans rapport
-    avec la tâche demandée. N'écrase pas le travail existant et examine
-    les fichiers concernés avant de les modifier.
-12. **Pas de fonctionnalités inventées :** ne crée pas de
-    fonctionnalités, de fichiers ou de configuration supplémentaires qui
-    n'ont pas été demandés ou approuvés.
+1.  **Allowed stack:** Python for the simulator and the agent;
+    Three.js for the 3D scene. Do not add any other dependency,
+    library, framework, or service without asking me first.
+2.  **One task at a time:** work only on the explicitly
+    requested task. Once finished, run the relevant
+    checks, summarize the changes, and wait for my approval. Never
+    start the next task on your own.
+3.  **Size limit:** no code file may exceed 200 lines. If
+    a code file risks exceeding this limit, stop and propose
+    a split before continuing.
+4.  **Mandatory tests:** every simulator function must come
+    with a test I can run. Give the exact command
+    to run the tests. Do not add a test dependency without
+    asking; prefer already-available standard test tools.
+5.  **Architecture decisions:** if an architecture, project-structure,
+    protocol, dependency, or API-contract decision
+    is needed and is not defined in the specifications,
+    stop and ask me. Do not decide for me.
+6.  **No electronic-simulation library:** the simulator
+    is a table of predefined values. It must not use an
+    electronic-simulation library or attempt to physically model
+    the circuit.
+7.  **Respect `SPEC.md`:** do not change the devices, their
+    faults, their measurement points, the three tools, their signatures
+    or their return structures without my explicit authorization.
+8.  **The simulator is authoritative:** the model must never invent
+    a measurement. Voltages, amplitudes, and signal states are read
+    from the active scenario table.
+9.  **No scenario leak:** the agent must not receive
+    the active fault identifier or any indicator revealing the
+    defective component.
+10. **No false success:** do not claim a test passed if
+    you did not run it. Clearly report unrun tests and
+    encountered limitations.
+11. **Minimal changes:** do not refactor unrelated code.
+    Do not overwrite existing work, and examine the relevant files
+    before modifying them.
+12. **No invented features:** do not create additional
+    features, files, or configuration that were
+    not requested or approved.
 
-## Procédure pour chaque tâche
+## Procedure for each task
 
-1.  Lire `AGENT.md` et `SPEC.md`.
-2.  Examiner les fichiers existants qui concernent directement la tâche.
-3.  Reformuler brièvement l'objectif et les fichiers qui seront
-    modifiés.
-4.  Si une information ou décision nécessaire manque, s'arrêter et me
-    demander.
-5.  Effectuer uniquement la tâche autorisée.
-6.  Vérifier que chaque fichier de code modifié fait au plus 200 lignes.
-7.  Exécuter les tests pertinents, y compris les tests du simulateur
-    concernés.
-8.  Résumer les fichiers modifiés, les commandes lancées et les
-    résultats exacts.
-9.  S'arrêter et attendre mon accord avant de poursuivre.
+1.  Read `AGENT.md` and `SPEC.md`.
+2.  Examine the existing files directly relevant to the task.
+3.  Briefly restate the goal and the files to be
+    modified.
+4.  If a required piece of information or decision is missing, stop and ask
+    me.
+5.  Perform only the authorized task.
+6.  Verify that each modified code file is at most 200 lines.
+7.  Run the relevant tests, including the relevant simulator
+    tests.
+8.  Summarize the modified files, the commands run, and the
+    exact results.
+9.  Stop and wait for my approval before continuing.
 
-## Format de compte rendu
+## Report format
 
-À la fin de chaque tâche, fournir : - **Fait :** changements réalisés. -
-**Fichiers :** liste des fichiers modifiés. - **Tests :** commande
-exacte et résultat réel, ou raison pour laquelle ils n'ont pas été
-exécutés. - **Limites :** points non vérifiés ou problèmes connus. -
-**Suite :** attendre mon instruction ; ne pas commencer une nouvelle
-tâche.
+At the end of each task, provide: - **Done:** changes made. -
+**Files:** list of modified files. - **Tests:** exact
+command and actual result, or why they were not
+run. - **Limitations:** unverified points or known issues. -
+**Next:** wait for my instruction; do not start a new
+task.

@@ -1,107 +1,107 @@
 {
-  "dispositif": "une carte de contrôle de drone quadrirotor fictive",
+  "dispositif": "a fictitious quadcopter drone control board",
   "scenario": "J1",
   "attendu": "Y1",
-  "symptome": "Le drone ne parvient pas à décoller : le moteur ne répond pas normalement.",
-  "chaine": "Le circuit est une carte de contrôle de drone quadrirotor fictive, étudiée sur une voie moteur : la batterie 14,8 V entre par le fusible FU1 puis le condensateur réservoir C1 vers le rail batterie. Le rail batterie alimente deux branches. Branche logique : le convertisseur abaisseur U1 découpe le rail batterie ; son nœud de commutation est lissé par l'inductance L1 pour produire le rail 5 V. Le rail 5 V alimente le récepteur radio RX1 et le régulateur U2, qui produit le rail 3,3 V. Le rail 3,3 V alimente l'oscillateur à quartz Y1, la centrale inertielle U4 et le microcontrôleur de vol U3. U3 est cadencé par l'horloge de Y1, reçoit la consigne du pilote depuis RX1, interroge U4 sur le bus capteur qu'il cadence lui-même, et produit la commande PWM du moteur. Branche puissance : le pilote de grille U5, alimenté par le rail batterie, amplifie la commande PWM ; sa sortie traverse la résistance de grille R1 vers la grille du MOSFET Q1, qui commute le courant du moteur mesuré par le shunt. La diode de roue libre D1 est en parallèle du moteur.",
+  "symptome": "The drone cannot take off: the motor does not respond normally.",
+  "chaine": "The circuit is a fictitious quadcopter drone control board, studied on one motor channel: the 14.8 V battery enters through fuse FU1 then bulk capacitor C1 to the battery rail. The battery rail feeds two branches. Logic branch: step-down converter U1 chops the battery rail; its switching node is smoothed by inductor L1 to produce the 5 V rail. The 5 V rail powers radio receiver RX1 and regulator U2, which produces the 3.3 V rail. The 3.3 V rail powers quartz oscillator Y1, inertial measurement unit U4 and flight microcontroller U3. U3 is clocked by the Y1 clock, receives the pilot setpoint from RX1, polls U4 over the sensor bus that it clocks itself, and produces the motor PWM command. Power branch: gate driver U5, powered by the battery rail, amplifies the PWM command; its output passes through gate resistor R1 to the gate of MOSFET Q1, which switches the motor current measured by the shunt. Freewheeling diode D1 is in parallel with the motor.",
   "points": [
     {
       "id": "TP1",
       "x": 40,
       "y": 50,
       "name": "BATT_IN",
-      "description": "entrée batterie, avant fusible"
+      "description": "battery input, before the fuse"
     },
     {
       "id": "TP2",
       "x": 190,
       "y": 50,
-      "name": "APRES_FUSIBLE",
-      "description": "après le fusible"
+      "name": "AFTER_FUSE",
+      "description": "after the fuse"
     },
     {
       "id": "TP3",
       "x": 340,
       "y": 50,
       "name": "RAIL_BATT",
-      "description": "rail batterie, après le condensateur réservoir"
+      "description": "battery rail, after the bulk capacitor"
     },
     {
       "id": "TP4",
       "x": 500,
       "y": 50,
-      "name": "NOEUD_SW",
-      "description": "nœud de commutation du convertisseur, avant l'inductance"
+      "name": "SW_NODE",
+      "description": "converter switching node, before the inductor"
     },
     {
       "id": "TP5",
       "x": 660,
       "y": 50,
       "name": "RAIL_5V",
-      "description": "rail 5 V, après l'inductance"
+      "description": "5 V rail, after the inductor"
     },
     {
       "id": "TP6",
       "x": 500,
       "y": 170,
       "name": "RAIL_3V3",
-      "description": "rail 3,3 V, sortie du régulateur"
+      "description": "3.3 V rail, regulator output"
     },
     {
       "id": "TP7",
       "x": 340,
       "y": 170,
-      "name": "HORLOGE",
-      "description": "horloge de l'oscillateur à quartz vers le microcontrôleur"
+      "name": "CLOCK",
+      "description": "quartz oscillator clock to the microcontroller"
     },
     {
       "id": "TP8",
       "x": 250,
       "y": 290,
-      "name": "BUS_CAPTEUR",
-      "description": "bus de données entre le microcontrôleur et la centrale inertielle"
+      "name": "SENSOR_BUS",
+      "description": "data bus between the microcontroller and the inertial measurement unit"
     },
     {
       "id": "TP9",
       "x": 760,
       "y": 240,
-      "name": "CONSIGNE_RADIO",
-      "description": "consigne du pilote, sortie du récepteur radio"
+      "name": "RADIO_SETPOINT",
+      "description": "pilot setpoint, radio receiver output"
     },
     {
       "id": "TP10",
       "x": 340,
       "y": 400,
       "name": "PWM_MCU",
-      "description": "commande PWM, sortie du microcontrôleur"
+      "description": "PWM command, microcontroller output"
     },
     {
       "id": "TP11",
       "x": 500,
       "y": 400,
-      "name": "SORTIE_PILOTE",
-      "description": "sortie du pilote de grille, avant la résistance de grille"
+      "name": "DRIVER_OUT",
+      "description": "gate driver output, before the gate resistor"
     },
     {
       "id": "TP12",
       "x": 660,
       "y": 400,
-      "name": "GRILLE_Q1",
-      "description": "grille du MOSFET"
+      "name": "GATE_Q1",
+      "description": "MOSFET gate"
     },
     {
       "id": "TP13",
       "x": 740,
       "y": 320,
-      "name": "PHASE_MOTEUR",
-      "description": "borne du moteur"
+      "name": "MOTOR_PHASE",
+      "description": "motor terminal"
     },
     {
       "id": "TP14",
       "x": 840,
       "y": 400,
       "name": "SHUNT",
-      "description": "aux bornes du shunt de mesure de courant"
+      "description": "across the current-sense shunt"
     }
   ],
   "composants": [
@@ -110,120 +110,120 @@
       "x": 115,
       "y": 50,
       "type": "fusible",
-      "name": "Fusible principal",
-      "role": "Protège l'entrée batterie",
-      "visual_notes": "Fusible traversant, marquage de référence lisible."
+      "name": "Main fuse",
+      "role": "Protects the battery input",
+      "visual_notes": "Through-hole fuse, legible reference marking."
     },
     {
       "id": "C1",
       "x": 265,
       "y": 50,
       "type": "condensateur",
-      "name": "Condensateur réservoir",
-      "role": "Lisse le rail batterie",
-      "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."
+      "name": "Bulk capacitor",
+      "role": "Smooths the battery rail",
+      "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."
     },
     {
       "id": "U1",
       "x": 420,
       "y": 50,
       "type": "circuit_integre",
-      "name": "Convertisseur abaisseur",
-      "role": "Découpe le rail batterie pour produire le 5 V",
-      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+      "name": "Step-down converter",
+      "role": "Chops the battery rail to produce the 5 V",
+      "visual_notes": "Through-hole integrated circuit, legible reference marking."
     },
     {
       "id": "L1",
       "x": 580,
       "y": 50,
       "type": "inductance",
-      "name": "Inductance de lissage",
-      "role": "Lisse le courant du convertisseur vers le rail 5 V",
-      "visual_notes": "Inductance torique bobinée, marquage de référence lisible."
+      "name": "Smoothing inductor",
+      "role": "Smooths the converter current to the 5 V rail",
+      "visual_notes": "Wound toroidal inductor, legible reference marking."
     },
     {
       "id": "U2",
       "x": 580,
       "y": 170,
       "type": "circuit_integre",
-      "name": "Régulateur 3,3 V",
-      "role": "Alimente la logique en 3,3 V",
-      "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."
+      "name": "3.3 V regulator",
+      "role": "Powers the logic at 3.3 V",
+      "visual_notes": "Regulator in standard package, legible reference marking."
     },
     {
       "id": "Y1",
       "x": 420,
       "y": 170,
       "type": "quartz",
-      "name": "Oscillateur à quartz",
-      "role": "Cadence le microcontrôleur",
-      "visual_notes": "Oscillateur en boîtier métallique, marquage de référence lisible."
+      "name": "Quartz oscillator",
+      "role": "Clocks the microcontroller",
+      "visual_notes": "Oscillator in metal can package, legible reference marking."
     },
     {
       "id": "RX1",
       "x": 760,
       "y": 140,
       "type": "module",
-      "name": "Récepteur radio",
-      "role": "Transmet la consigne du pilote",
-      "visual_notes": "Module récepteur enfiché, marquage de référence lisible."
+      "name": "Radio receiver",
+      "role": "Relays the pilot setpoint",
+      "visual_notes": "Plug-in receiver module, legible reference marking."
     },
     {
       "id": "U3",
       "x": 340,
       "y": 290,
       "type": "circuit_integre",
-      "name": "Microcontrôleur de vol",
-      "role": "Calcule et génère la commande PWM du moteur",
-      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+      "name": "Flight microcontroller",
+      "role": "Computes and generates the motor PWM command",
+      "visual_notes": "Through-hole integrated circuit, legible reference marking."
     },
     {
       "id": "U4",
       "x": 150,
       "y": 290,
       "type": "circuit_integre",
-      "name": "Centrale inertielle",
-      "role": "Mesure l'attitude du drone",
-      "visual_notes": "Capteur en boîtier standard, marquage de référence lisible."
+      "name": "Inertial measurement unit",
+      "role": "Measures the drone attitude",
+      "visual_notes": "Sensor in standard package, legible reference marking."
     },
     {
       "id": "U5",
       "x": 420,
       "y": 400,
       "type": "circuit_integre",
-      "name": "Pilote de grille",
-      "role": "Amplifie la commande PWM pour le MOSFET",
-      "visual_notes": "Circuit intégré traversant, marquage de référence lisible."
+      "name": "Gate driver",
+      "role": "Amplifies the PWM command for the MOSFET",
+      "visual_notes": "Through-hole integrated circuit, legible reference marking."
     },
     {
       "id": "R1",
       "x": 580,
       "y": 400,
       "type": "resistance",
-      "name": "Résistance de grille",
-      "role": "Limite le courant de commande de grille",
-      "visual_notes": "Résistance traversante, marquage de référence lisible."
+      "name": "Gate resistor",
+      "role": "Limits the gate drive current",
+      "visual_notes": "Through-hole resistor, legible reference marking."
     },
     {
       "id": "Q1",
       "x": 740,
       "y": 400,
       "type": "transistor",
-      "name": "MOSFET de puissance",
-      "role": "Commute le courant du moteur",
-      "visual_notes": "Transistor en boîtier standard, marquage de référence lisible."
+      "name": "Power MOSFET",
+      "role": "Switches the motor current",
+      "visual_notes": "Transistor in standard package, legible reference marking."
     },
     {
       "id": "D1",
       "x": 840,
       "y": 320,
       "type": "diode",
-      "name": "Diode de roue libre",
-      "role": "Protège des surtensions de commutation",
-      "visual_notes": "Diode traversante, marquage de référence lisible."
+      "name": "Freewheeling diode",
+      "role": "Protects against switching overvoltages",
+      "visual_notes": "Through-hole diode, legible reference marking."
     }
   ],
-  "nominale": "Fiche technique du constructeur, fonctionnement normal : TP1 : 14.8 V DC, 0.10 Vpp, clean ; TP2 : 14.8 V DC, 0.10 Vpp, clean ; TP3 : 14.8 V DC, 0.05 Vpp, clean ; TP4 : 5.00 V DC, 14.8 Vpp, clean ; TP5 : 5.00 V DC, 0.02 Vpp, clean ; TP6 : 3.30 V DC, 0.01 Vpp, clean ; TP7 : 1.65 V DC, 3.30 Vpp, clean ; TP8 : 1.65 V DC, 3.30 Vpp, clean ; TP9 : 1.65 V DC, 3.30 Vpp, clean ; TP10 : 1.65 V DC, 3.30 Vpp, clean ; TP11 : 6.00 V DC, 12.0 Vpp, clean ; TP12 : 6.00 V DC, 12.0 Vpp, clean ; TP13 : 7.40 V DC, 14.8 Vpp, clean ; TP14 : 0.20 V DC, 0.05 Vpp, clean. TP4 et TP7 à TP13 portent un signal commuté ou cadencé en fonctionnement normal : une amplitude élevée y est attendue.",
+  "nominale": "Manufacturer datasheet, normal operation: TP1: 14.8 V DC, 0.10 Vpp, clean; TP2: 14.8 V DC, 0.10 Vpp, clean; TP3: 14.8 V DC, 0.05 Vpp, clean; TP4: 5.00 V DC, 14.8 Vpp, clean; TP5: 5.00 V DC, 0.02 Vpp, clean; TP6: 3.30 V DC, 0.01 Vpp, clean; TP7: 1.65 V DC, 3.30 Vpp, clean; TP8: 1.65 V DC, 3.30 Vpp, clean; TP9: 1.65 V DC, 3.30 Vpp, clean; TP10: 1.65 V DC, 3.30 Vpp, clean; TP11: 6.00 V DC, 12.0 Vpp, clean; TP12: 6.00 V DC, 12.0 Vpp, clean; TP13: 7.40 V DC, 14.8 Vpp, clean; TP14: 0.20 V DC, 0.05 Vpp, clean. TP4 and TP7 to TP13 carry a switched or clocked signal in normal operation: a high amplitude is expected there.",
   "table": {
     "TP1": [
       14.8,
@@ -299,62 +299,98 @@
   "tours": [
     {
       "turn": 1,
-      "reasoning_before": "Je caractérise la panne au niveau moteur avant de remonter la chaîne.",
+      "reasoning_before": "Starting from the motor output to characterize the fault, then tracing back by dichotomy.",
       "tool": "test_signal",
       "argument": "{\"point_id\":\"TP13\"}",
       "value_received": "{\"point_id\": \"TP13\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
-      "reasoning_after": "Signal moteur absent : je vérifie si l'alimentation continue est aussi en cause.",
+      "reasoning_after": "Symptom at motor terminal TP13: signal amplitude 0 Vpp silent vs 14.8 Vpp expected - abnormal signal. Need to check if DC also abnormal to know quantity.\nHYPOTHESES: FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1",
       "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
     },
     {
       "turn": 2,
-      "reasoning_before": "Signal moteur absent : je vérifie si l'alimentation continue est aussi en cause.",
+      "reasoning_before": "Signal is silent at the motor — now checking whether DC is also affected.",
       "tool": "measure_voltage",
       "argument": "{\"point_id\":\"TP13\"}",
       "value_received": "{\"point_id\": \"TP13\", \"voltage_v\": 14.8, \"unit\": \"V\"}",
-      "reasoning_after": "",
+      "reasoning_after": "DC reads high with no switching — I'll work backward to find where drive is lost.",
       "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
     },
     {
       "turn": 3,
-      "reasoning_before": "",
+      "reasoning_before": "DC reads high with no switching — I'll work backward to find where drive is lost.",
       "tool": "test_signal",
       "argument": "{\"point_id\":\"TP10\"}",
       "value_received": "{\"point_id\": \"TP10\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
-      "reasoning_after": "Point moteur silencieux et PWM MCU silencieux : je remonte vers l'horloge pour localiser la première anomalie.",
+      "reasoning_after": "",
       "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
     },
     {
       "turn": 4,
-      "reasoning_before": "Point moteur silencieux et PWM MCU silencieux : je remonte vers l'horloge pour localiser la première anomalie.",
-      "tool": "test_signal",
-      "argument": "{\"point_id\":\"TP7\"}",
-      "value_received": "{\"point_id\": \"TP7\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
-      "reasoning_after": "Signal coupé dès l'horloge : je vérifie l'alimentation de l'oscillateur.",
+      "reasoning_before": "",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP10\"}",
+      "value_received": "{\"point_id\": \"TP10\", \"voltage_v\": 0.0, \"unit\": \"V\"}",
+      "reasoning_after": "The MCU command is missing, so downstream power parts are suffering — I'll bisect the logic supply.",
       "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
     },
     {
       "turn": 5,
-      "reasoning_before": "Signal coupé dès l'horloge : je vérifie l'alimentation de l'oscillateur.",
+      "reasoning_before": "The MCU command is missing, so downstream power parts are suffering — I'll bisect the logic supply.",
       "tool": "measure_voltage",
-      "argument": "{\"point_id\":\"TP6\"}",
-      "value_received": "{\"point_id\": \"TP6\", \"voltage_v\": 3.3, \"unit\": \"V\"}",
-      "reasoning_after": "Le PWM et l'horloge sont silencieux alors que le 3,3 V est bon : je vérifie les conditions de l'oscillateur.",
+      "argument": "{\"point_id\":\"TP5\"}",
+      "value_received": "{\"point_id\": \"TP5\", \"voltage_v\": 5.0, \"unit\": \"V\"}",
+      "reasoning_after": "",
       "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
     },
     {
       "turn": 6,
-      "reasoning_before": "Le PWM et l'horloge sont silencieux alors que le 3,3 V est bon : je vérifie les conditions de l'oscillateur.",
+      "reasoning_before": "",
+      "tool": "measure_voltage",
+      "argument": "{\"point_id\":\"TP6\"}",
+      "value_received": "{\"point_id\": \"TP6\", \"voltage_v\": 3.3, \"unit\": \"V\"}",
+      "reasoning_after": "MCU supply checks nominal, so I'm moving upstream to verify its clock and inputs.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 7,
+      "reasoning_before": "MCU supply checks nominal, so I'm moving upstream to verify its clock and inputs.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP7\"}",
+      "value_received": "{\"point_id\": \"TP7\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
+      "reasoning_after": "Supply rails are good but clock and PWM are missing — checking the clock DC level to confirm the source.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 8,
+      "reasoning_before": "Supply rails are good but clock and PWM are missing — checking the clock DC level to confirm the source.",
       "tool": "measure_voltage",
       "argument": "{\"point_id\":\"TP7\"}",
       "value_received": "{\"point_id\": \"TP7\", \"voltage_v\": 0.0, \"unit\": \"V\"}",
-      "reasoning_after": "TP7 silencieux (0 Vpp / 0 V DC au lieu de 3,30 Vpp / 1,65 V) alors que son alimentation TP6 est nominale en continu 3,3 V. TP7 est le premier point anormal en remontant depuis TP10 silencieux et TP13 silencieux. Y1 en conditions d'alimentation nominales qui ne produit plus d'horloge est donc fautif, l'aval U3, U4, RX1, U5, R1, Q1, D1 ne fait que subir l'absence de clock.\nHYPOTHESES : Y1\nDIAGNOSTIC : Y1, premier point anormal TP7 juste après Y1 avec alimentation TP6 nominale 3,3 V, aval TP10 et TP13 silencieux subis ; test de confirmation recommandé : test_signal TP6 pour vérifier rail 3,3 V propre puis remplacement de Y1.",
+      "reasoning_after": "Clock output is dead despite good supply — checking the other MCU inputs to isolate the first failure.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 9,
+      "reasoning_before": "Clock output is dead despite good supply — checking the other MCU inputs to isolate the first failure.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP9\"}",
+      "value_received": "{\"point_id\": \"TP9\", \"amplitude_vpp\": 3.3, \"quality\": \"clean\"}",
+      "reasoning_after": "Clock is missing while setpoint is present — sampling the sensor bus to confirm what's downstream of the MCU.",
+      "remaining_hypotheses": "FU1, C1, U1, L1, U2, Y1, RX1, U3, U4, U5, R1, Q1, D1"
+    },
+    {
+      "turn": 10,
+      "reasoning_before": "Clock is missing while setpoint is present — sampling the sensor bus to confirm what's downstream of the MCU.",
+      "tool": "test_signal",
+      "argument": "{\"point_id\":\"TP8\"}",
+      "value_received": "{\"point_id\": \"TP8\", \"amplitude_vpp\": 0.0, \"quality\": \"silent\"}",
+      "reasoning_after": "HYPOTHESES: Y1\nDIAGNOSTIC: Y1 - TP5 5.0V nominal and TP6 3.3V nominal prove logic supply chain FU1,C1,U1,L1,U2 is nominal; TP9 3.3Vpp clean proves RX1 nominal; TP7 is 0V DC / 0Vpp silent vs 1.65V / 3.3Vpp clean expected, the first abnormal point in signal direction, while its supply TP6 is nominal, so Y1 under nominal operating conditions degrades the signal; downstream TP8 silent, TP10 0V/silent and TP13 silent are suffered consequences because U3 without clock cannot drive sensor bus or PWM. Recommended confirmation test: replace Y1 then test_signal TP7 should return to 3.3Vpp clean and test_signal TP10 should return to 3.3Vpp clean.",
       "remaining_hypotheses": "Y1"
     }
   ],
   "diagnostic": "Y1",
-  "justification": ", premier point anormal TP7 juste après Y1 avec alimentation TP6 nominale 3,3 V, aval TP10 et TP13 silencieux subis ; test de confirmation recommandé : test_signal TP6 pour vérifier rail 3,3 V propre puis remplacement de Y1",
-  "nb_appels": 6,
+  "justification": "TP5 5.0V nominal and TP6 3.3V nominal prove logic supply chain FU1,C1,U1,L1,U2 is nominal; TP9 3.3Vpp clean proves RX1 nominal; TP7 is 0V DC / 0Vpp silent vs 1.65V / 3.3Vpp clean expected, the first abnormal point in signal direction, while its supply TP6 is nominal, so Y1 under nominal operating conditions degrades the signal; downstream TP8 silent, TP10 0V/silent and TP13 silent are suffered consequences because U3 without clock cannot drive sensor bus or PWM. Recommended confirmation test: replace Y1 then test_signal TP7 should return to 3.3Vpp clean and test_signal TP10 should return to 3.3Vpp clean",
+  "nb_appels": 10,
   "liaisons": [
     [
       "TP1",

@@ -1,27 +1,27 @@
 {
-  "name": "une carte d'attaque de moteur à courant continu fictive",
-  "chain": "Le circuit est une carte d'attaque de moteur à courant continu fictive : l'entrée 12 V traverse le fusible FU1 puis le condensateur d'entrée C1 vers le rail 12 V. Le rail 12 V alimente deux branches : la branche puissance, où le MOSFET Q1 commute le courant vers la sortie moteur mesurée par le shunt, et la branche logique, où le régulateur U1 et son condensateur de découplage C2 produisent un rail 5 V qui alimente le microcontrôleur U2, dont la sortie PWM passe par la résistance de grille R1 pour commander la grille de Q1. La diode de roue libre D1 est en parallèle du moteur.",
+  "name": "a fictitious DC motor driver board",
+  "chain": "The circuit is a fictitious DC motor driver board: the 12 V input passes through fuse FU1 then input capacitor C1 to the 12 V rail. The 12 V rail feeds two branches: the power branch, where MOSFET Q1 switches the current to the motor output measured by the shunt, and the logic branch, where regulator U1 and its decoupling capacitor C2 produce a 5 V rail powering microcontroller U2, whose PWM output passes through gate resistor R1 to drive the gate of Q1. Freewheeling diode D1 is in parallel with the motor.",
   "points": [
-    {"id": "TP1", "x": 50, "y": 70, "name": "ENTREE_12V", "description": "avant fusible"},
-    {"id": "TP2", "x": 190, "y": 70, "name": "APRES_FUSIBLE", "description": "après le fusible"},
-    {"id": "TP3", "x": 330, "y": 70, "name": "RAIL_12V", "description": "après le condensateur d'entrée"},
-    {"id": "TP4", "x": 330, "y": 160, "name": "REG_IN", "description": "entrée du régulateur"},
-    {"id": "TP5", "x": 430, "y": 250, "name": "RAIL_5V", "description": "sortie du régulateur"},
-    {"id": "TP6", "x": 530, "y": 250, "name": "MCU_VCC", "description": "alimentation du microcontrôleur"},
-    {"id": "TP7", "x": 430, "y": 330, "name": "PWM_OUT", "description": "sortie de commande du microcontrôleur"},
-    {"id": "TP8", "x": 250, "y": 330, "name": "GRILLE_Q1", "description": "grille du MOSFET"},
-    {"id": "TP9", "x": 500, "y": 70, "name": "SORTIE_MOTEUR", "description": "borne du moteur"},
-    {"id": "TP10", "x": 500, "y": 150, "name": "SHUNT", "description": "aux bornes du shunt de mesure de courant"}
+    {"id": "TP1", "x": 50, "y": 70, "name": "INPUT_12V", "description": "before the fuse"},
+    {"id": "TP2", "x": 190, "y": 70, "name": "AFTER_FUSE", "description": "after the fuse"},
+    {"id": "TP3", "x": 330, "y": 70, "name": "RAIL_12V", "description": "after the input capacitor"},
+    {"id": "TP4", "x": 330, "y": 160, "name": "REG_IN", "description": "regulator input"},
+    {"id": "TP5", "x": 430, "y": 250, "name": "RAIL_5V", "description": "regulator output"},
+    {"id": "TP6", "x": 530, "y": 250, "name": "MCU_VCC", "description": "microcontroller supply"},
+    {"id": "TP7", "x": 430, "y": 330, "name": "PWM_OUT", "description": "microcontroller drive output"},
+    {"id": "TP8", "x": 250, "y": 330, "name": "GATE_Q1", "description": "MOSFET gate"},
+    {"id": "TP9", "x": 500, "y": 70, "name": "MOTOR_OUT", "description": "motor terminal"},
+    {"id": "TP10", "x": 500, "y": 150, "name": "SHUNT", "description": "across the current-sense shunt"}
   ],
   "components": [
-    {"id": "FU1", "x": 120, "y": 70, "type": "fusible", "name": "Fusible", "role": "Protège l'entrée", "visual_notes": "Fusible traversant, marquage de référence lisible."},
-    {"id": "C1", "x": 260, "y": 70, "type": "condensateur", "name": "Condensateur d'entrée", "role": "Lisse la tension d'alimentation", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
-    {"id": "U1", "x": 330, "y": 250, "type": "circuit_integre", "name": "Régulateur 5 V", "role": "Alimente la logique", "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."},
-    {"id": "C2", "x": 430, "y": 180, "type": "condensateur", "name": "Condensateur de découplage", "role": "Stabilise le rail logique", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
-    {"id": "U2", "x": 530, "y": 330, "type": "circuit_integre", "name": "Microcontrôleur", "role": "Génère le signal de commande PWM", "visual_notes": "Circuit intégré traversant, marquage de référence lisible."},
-    {"id": "R1", "x": 340, "y": 330, "type": "resistance", "name": "Résistance de grille", "role": "Limite le courant de commande de grille", "visual_notes": "Résistance traversante, marquage de référence lisible."},
-    {"id": "Q1", "x": 420, "y": 70, "type": "transistor", "name": "MOSFET de puissance", "role": "Commute le courant moteur", "visual_notes": "Transistor en boîtier standard, marquage de référence lisible."},
-    {"id": "D1", "x": 460, "y": 20, "type": "diode", "name": "Diode de roue libre", "role": "Protège des surtensions de commutation", "visual_notes": "Diode traversante, marquage de référence lisible."}
+    {"id": "FU1", "x": 120, "y": 70, "type": "fusible", "name": "Fuse", "role": "Protects the input", "visual_notes": "Through-hole fuse, legible reference marking."},
+    {"id": "C1", "x": 260, "y": 70, "type": "condensateur", "name": "Input capacitor", "role": "Smooths the supply voltage", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."},
+    {"id": "U1", "x": 330, "y": 250, "type": "circuit_integre", "name": "5 V regulator", "role": "Powers the logic", "visual_notes": "Regulator in standard package, legible reference marking."},
+    {"id": "C2", "x": 430, "y": 180, "type": "condensateur", "name": "Decoupling capacitor", "role": "Stabilizes the logic rail", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."},
+    {"id": "U2", "x": 530, "y": 330, "type": "circuit_integre", "name": "Microcontroller", "role": "Generates the PWM drive signal", "visual_notes": "Through-hole integrated circuit, legible reference marking."},
+    {"id": "R1", "x": 340, "y": 330, "type": "resistance", "name": "Gate resistor", "role": "Limits the gate drive current", "visual_notes": "Through-hole resistor, legible reference marking."},
+    {"id": "Q1", "x": 420, "y": 70, "type": "transistor", "name": "Power MOSFET", "role": "Switches the motor current", "visual_notes": "Transistor in standard package, legible reference marking."},
+    {"id": "D1", "x": 460, "y": 20, "type": "diode", "name": "Freewheeling diode", "role": "Protects against switching overvoltages", "visual_notes": "Through-hole diode, legible reference marking."}
   ],
   "liaisons": [
     ["TP1", "FU1"],
@@ -130,7 +130,7 @@
       "TP10": [0.14, 0.09, "distorted"]
     }
   },
-  "nominal": "Fiche technique du constructeur, fonctionnement normal : TP1 : 12.0 V DC, 0.05 Vpp, clean ; TP2 : 12.0 V DC, 0.05 Vpp, clean ; TP3 : 12.0 V DC, 0.05 Vpp, clean ; TP4 : 12.0 V DC, 0.05 Vpp, clean ; TP5 : 5.00 V DC, 0.02 Vpp, clean ; TP6 : 5.00 V DC, 0.02 Vpp, clean ; TP7 : 2.50 V DC, 5.00 Vpp, clean ; TP8 : 2.50 V DC, 5.00 Vpp, clean ; TP9 : 6.00 V DC, 12.0 Vpp, clean ; TP10 : 0.15 V DC, 0.05 Vpp, clean. TP7, TP8 et TP9 portent un signal commuté en fonctionnement normal : une amplitude élevée y est attendue.",
-  "symptom": "Le moteur ne fonctionne pas correctement.",
+  "nominal": "Manufacturer datasheet, normal operation: TP1: 12.0 V DC, 0.05 Vpp, clean; TP2: 12.0 V DC, 0.05 Vpp, clean; TP3: 12.0 V DC, 0.05 Vpp, clean; TP4: 12.0 V DC, 0.05 Vpp, clean; TP5: 5.00 V DC, 0.02 Vpp, clean; TP6: 5.00 V DC, 0.02 Vpp, clean; TP7: 2.50 V DC, 5.00 Vpp, clean; TP8: 2.50 V DC, 5.00 Vpp, clean; TP9: 6.00 V DC, 12.0 Vpp, clean; TP10: 0.15 V DC, 0.05 Vpp, clean. TP7, TP8 and TP9 carry a switched signal in normal operation: a high amplitude is expected there.",
+  "symptom": "The motor does not work properly.",
   "budget_appels": 12
 }

@@ -1,141 +1,145 @@
 # BenchMate 3D
 
-Un agent de diagnostic de panne, et le banc qui prouve qu'il raisonne.
+A fault-diagnosis agent, and the bench that proves it reasons.
 
-Muse Spark reçoit un symptôme, une fiche technique et trois outils de mesure. Il
-formule ses hypothèses, choisit où mesurer, interprète ce qu'il reçoit, élimine,
-et conclut. Il n'a jamais accès à l'état réel de la carte : toutes les valeurs
-viennent d'un simulateur déterministe qui, lui, connaît la panne.
+Muse Spark receives a symptom, a datasheet, and three measurement tools. It
+forms its hypotheses, chooses where to measure, interprets what it receives,
+eliminates, and concludes. It never has access to the real board state: every
+value comes from a deterministic simulator which does know the fault.
 
-**Le modèle ne peut rien inventer.** C'est ce qui rend chaque diagnostic vérifiable.
+**The model cannot invent anything.** That is what makes every diagnosis verifiable.
 
-## Résultats
+## Results
 
-**200 diagnostics, 200 corrects.** Quatre dispositifs sans rapport les uns avec les
-autres, consigne d'agent identique au mot près.
+**200 diagnoses, 200 correct.** Four unrelated devices, agent prompt identical
+word for word.
 
-| Dispositif | Points | Composants | Pannes | Taux | Mesures en moyenne |
+| Device | Points | Components | Faults | Rate | Avg measurements |
 | --- | --- | --- | --- | --- | --- |
-| Préamplificateur audio | 5 | 5 | 4 | 40/40 | 6,0 |
-| Alimentation régulée | 6 | 4 | 4 | 40/40 | 4,7 |
-| Carte d'attaque moteur | 10 | 8 | 6 | 60/60 | 6,1 |
-| Carte de contrôle de drone | 14 | 13 | 6 | 60/60 | 7,4 |
+| Audio preamplifier | 5 | 5 | 4 | 40/40 | 6.0 |
+| Regulated power supply | 6 | 4 | 4 | 40/40 | 4.7 |
+| Motor driver board | 10 | 8 | 6 | 60/60 | 6.1 |
+| Drone control board | 14 | 13 | 6 | 60/60 | 7.4 |
 
-Reproductible : `python batch.py 10 drone` (`preamplificateur`, `alimentation`,
-`moteur` ou `drone`, 10 passages par panne).
+Reproducible: `python batch.py 10 drone` (`preamplificateur`, `alimentation`,
+`moteur` or `drone`, 10 runs per fault).
 
-## Ce qui a été construit pendant le hackathon
+## What was built during the hackathon
 
-**La totalité du dépôt.** Aucun code antérieur au 27 octobre 2026, aucune
-bibliothèque de simulation électronique, aucune dépendance hors bibliothèque
-standard de Python. Les spécifications sont datées du 26 octobre, tout le code du
-27 octobre au 2 novembre — l'historique git le montre.
+**The whole repository.** No code predating October 27, 2026, no electronic
+simulation library, no dependency outside the Python standard library. The
+specifications are dated October 26, all code October 27 to November 2 — the
+git history shows it.
 
-## L'essentiel : ce qu'il a fallu pour y arriver
+## The core: what it took to get there
 
-Le modèle seul atteignait **50 %**. Il accusait systématiquement le composant le
-plus proche du symptôme. Trois principes, ajoutés à sa consigne, l'ont porté à
-100 % :
+The model alone reached **50%**. It systematically blamed the component
+closest to the symptom. Three principles, added to its prompt, brought it to
+100%:
 
-1. **Propagation.** Une anomalie en amont rend anormal tout ce qui suit. Le fautif
-   précède la *première* anomalie de la chaîne — ce qui vient après ne fait que subir.
-2. **Dichotomie.** Partir du symptôme là où il se manifeste et remonter en coupant
-   la chaîne en deux, plutôt que de balayer les points dans l'ordre.
-3. **Vérification des conditions de fonctionnement.** Ne jamais condamner un
-   composant sans avoir vérifié son alimentation et sa polarisation. Un composant
-   mal alimenté dysfonctionne sans être fautif.
+1. **Propagation.** An upstream anomaly makes everything downstream abnormal.
+   The culprit precedes the *first* anomaly in the chain — everything after
+   merely suffers.
+2. **Dichotomy.** Start from the symptom where it manifests and work back up
+   by splitting the chain in two, rather than sweeping the points in order.
+3. **Operating-conditions check.** Never condemn a component without checking
+   its supply and bias. A poorly powered component misbehaves without being
+   at fault.
 
-Aucun des trois n'est spécifique à l'électronique : ce sont les réflexes de
-n'importe quel dépannage par élimination, et le modèle ne les applique pas seul.
+None of the three is specific to electronics: they are the reflexes of any
+troubleshooting by elimination, and the model does not apply them on its own.
 
-Chacun a réparé des pannes en en cassant d'autres. Le troisième a complété la
-carte moteur mais dégradé le préamplificateur — c'est le harnais de mesure qui
-l'a révélé, en deux minutes.
+Each one fixed some faults while breaking others. The third completed the
+motor board but degraded the preamplifier — the measurement harness revealed
+it in two minutes.
 
-## Ce que l'agent raisonne, sur la carte de drone
+## What the agent reasons, on the drone board
 
-Panne J2, fusible partiellement dégradé, carte de 13 composants découverte sans
-aucune adaptation :
+Fault J2, partially degraded fuse, 13-component board discovered with no
+adaptation:
 
-> Sortie moteur dégradée → remonte la chaîne PWM → **TP10 nominal**, la commande du
-> microcontrôleur est bonne → TP11 anormal juste après le pilote de grille, *mais
-> son alimentation TP3 est à 11 V au lieu de 14,8* → **« U5 subit donc sa condition
-> d'alimentation »** → dichotomie sur la chaîne d'alimentation → TP2 anormal, TP1
+> Degraded motor output → walks back up the PWM chain → **TP10 nominal**, the
+> microcontroller drive is good → TP11 abnormal just past the gate driver, *but
+> its TP3 supply reads 11 V instead of 14.8* → **"U5 is therefore suffering its
+> supply condition"** → dichotomy on the supply chain → TP2 abnormal, TP1
 > nominal → **FU1**.
 
-Deux composants successivement disculpés, deux niveaux remontés, huit mesures.
+Two components successively exonerated, two levels walked back up, eight
+measurements.
 
-## Indépendant du dispositif
+## Device-independent
 
-La consigne de l'agent ne contient **aucun identifiant de point, aucun nom de
-composant, aucune référence à un circuit** — un test automatique le vérifie contre
-tous les dispositifs du dépôt.
+The agent prompt contains **no point identifier, no component name, no
+reference to any circuit** — an automated test verifies this against every
+device in the repository.
 
-Ajouter un dispositif, c'est ajouter un fichier de données : la chaîne, les points,
-les composants, la fiche nominale du constructeur, les scénarios. Les trois
-dispositifs ajoutés après le premier l'ont été ainsi, et diagnostiqués à 100 % sans
-qu'un mot de la consigne ne change.
+Adding a device means adding a data file: the chain, the points, the
+components, the manufacturer's nominal datasheet, the scenarios. The three
+devices added after the first were added this way, and diagnosed at 100%
+without a word of the prompt changing.
 
-En production, le simulateur est remplacé par l'instrument réel. L'agent, lui, ne
-change pas.
+In production, the simulator is replaced by the real instrument. The agent
+itself does not change.
 
-## Ce que l'agent reçoit, et ce qu'il ne reçoit pas
+## What the agent receives, and what it does not
 
-**Reçoit** : la description de la chaîne, les points de mesure, les trois outils,
-la fiche technique des valeurs nominales — celle dont dispose tout technicien — et
-le symptôme rapporté.
+**Receives**: the chain description, the measurement points, the three tools,
+the nominal-values datasheet — the one any technician has — and the reported
+symptom.
 
-**Ne reçoit pas** : les tables de pannes, leur nombre, leur existence, ni aucune
-valeur en défaut. Des tests anti-fuite vérifient qu'aucune de ces valeurs
-n'apparaît dans son contexte. Et aucune instruction ne lui dit d'appeler
-un outil : il décide seul s'il mesure, et où.
+**Does not receive**: the fault tables, their count, their existence, or any
+faulty value. Anti-leak tests verify that none of those values appears in its
+context. And no instruction tells it to call a tool: it decides alone whether
+to measure, and where.
 
-## Le rejeu 3D
+## The 3D replay
 
-`viewer/index.html` — page autonome, aucune requête réseau, à ouvrir par
-double-clic. Elle charge un journal de passage et le rejoue : la carte en 3D avec
-ses composants modélisés, la sonde qui se déplace de point en point, l'oscillogramme
-qui superpose le signal nominal au signal mesuré, le raisonnement de l'agent affiché
-au fil de l'eau, et les hypothèses qui s'éteignent une à une.
+`viewer/index.html` — standalone page, no network requests, open by
+double-click. It loads a run log and replays it: the 3D board with its modeled
+components, the probe moving from point to point, the oscilloscope trace
+overlaying the nominal signal on the measured signal, the agent's reasoning
+displayed as it unfolds, and hypotheses switching off one by one.
 
-Sur la carte de drone, la liste passe de **13 hypothèses à 1** en huit mesures.
+On the drone board, the list goes from **13 hypotheses to 1** in eight
+measurements.
 
-La page ne touche ni au simulateur ni à l'API : tout vient du journal.
+The page touches neither the simulator nor the API: everything comes from the
+log.
 
-## Les modèles Meta
+## Meta models
 
-**Muse Spark** (`muse-spark-1.3`), via Meta Model API, en appel de fonction. C'est
-le moteur entier : hypothèses, choix des mesures, interprétation, conclusion. Aucun
-autre modèle n'est utilisé — aucun n'aurait servi à autre chose qu'à faire nombre.
+**Muse Spark** (`muse-spark-1.3`), via the Meta Model API, with function
+calling. It is the entire engine: hypotheses, measurement choices,
+interpretation, conclusion. No other model is used — none would have served
+any purpose but padding the count.
 
 ## Architecture
 
-- `simulator.py` — détient la vérité, expose trois outils, ne révèle jamais le scénario actif
-- `contexte.py` — construit le contexte de l'agent depuis le dispositif ; ne contient rien de spécifique
-- `diagnostic.py` — la boucle : un outil par tour, budget paramétrable, tout journalisé
-- `export_json.py` — l'enregistrement d'un passage, rejouable sans simulateur ni API
-- `batch.py` — rejoue chaque panne N fois et note les résultats
-- `devices/*.json` — les quatre dispositifs
-- `viewer/` — le rejeu 3D
+- `simulator.py` — holds the truth, exposes three tools, never reveals the active scenario
+- `contexte.py` — builds the agent context from the device; contains nothing device-specific
+- `diagnostic.py` — the loop: one tool per turn, configurable budget, everything logged
+- `export_json.py` — the recording of one run, replayable with no simulator or API
+- `batch.py` — replays each fault N times and scores the results
+- `devices/*.json` — the four devices
+- `viewer/` — the 3D replay
 
-## Lancer
+## Run
 
 ```
 $env:MODEL_API_KEY = "..."
 python diagnostic.py J1 drone
-python diagnostic.py J1 drone --json runs/mon_passage.json
+python diagnostic.py J1 drone --json runs/my_run.json
 python batch.py 10 drone
 pytest
 ```
 
+Then open `viewer/index.html` and load a log from `runs/`.
 
-Puis ouvrir `viewer/index.html` et y charger un journal de `runs/`.
+## Limitations
 
-## Limites
+The devices are simulated: the values are tables, not circuit solving. That is
+deliberate — the subject is the agent's reasoning, and a deterministic table
+is precisely what makes it gradable. Switching to a real instrument happens
+behind the three tools, without touching the agent.
 
-Les dispositifs sont simulés : les valeurs sont des tables, pas une résolution de
-circuit. C'est délibéré — le sujet est le raisonnement de l'agent, et une table
-déterministe est précisément ce qui permet de le noter. Le passage à un instrument
-réel se fait derrière les trois outils, sans toucher à l'agent.
-
-Une seule panne à la fois. Les pannes multiples ne sont pas traitées.
+One fault at a time. Multiple faults are not handled.

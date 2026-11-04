@@ -1,19 +1,19 @@
 {
-  "name": "un preamplificateur audio fictif",
-  "chain": "Le circuit est un preamplificateur audio fictif : le signal entre par le condensateur d'entree C1, traverse le reseau de polarisation R1 puis l'amplificateur operationnel U1, et ressort par le condensateur de sortie C2 vers la sortie audio. L'alimentation PS1 fournit le rail 9 V a l'ensemble du circuit.",
+  "name": "a fictitious audio preamplifier",
+  "chain": "The circuit is a fictitious audio preamplifier: the signal enters through input capacitor C1, passes through bias network R1 and operational amplifier U1, and exits through output capacitor C2 to the audio output. Power supply PS1 provides the 9 V rail to the whole circuit.",
   "points": [
-    {"id": "TP1", "x": 70, "y": 100, "name": "SUPPLY_9V", "description": "rail d'alimentation"},
-    {"id": "TP2", "x": 185, "y": 100, "name": "BIAS_REF", "description": "reference de polarisation"},
-    {"id": "TP3", "x": 300, "y": 100, "name": "AMP_INPUT", "description": "entree amplificateur"},
-    {"id": "TP4", "x": 415, "y": 100, "name": "AMP_OUTPUT", "description": "sortie amplificateur"},
-    {"id": "TP5", "x": 530, "y": 100, "name": "AUDIO_OUT", "description": "sortie audio apres condensateur de liaison"}
+    {"id": "TP1", "x": 70, "y": 100, "name": "SUPPLY_9V", "description": "supply rail"},
+    {"id": "TP2", "x": 185, "y": 100, "name": "BIAS_REF", "description": "bias reference"},
+    {"id": "TP3", "x": 300, "y": 100, "name": "AMP_INPUT", "description": "amplifier input"},
+    {"id": "TP4", "x": 415, "y": 100, "name": "AMP_OUTPUT", "description": "amplifier output"},
+    {"id": "TP5", "x": 530, "y": 100, "name": "AUDIO_OUT", "description": "audio output after coupling capacitor"}
   ],
   "components": [
-    {"id": "C1", "x": 185, "y": 280, "type": "condensateur", "name": "Condensateur d'entrée", "role": "Couple le signal d'entrée", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
-    {"id": "R1", "x": 300, "y": 280, "type": "resistance", "name": "Réseau de polarisation", "role": "Établit la référence de polarisation", "visual_notes": "Réseau de résistances traversant, marquage de référence lisible."},
-    {"id": "U1", "x": 415, "y": 280, "type": "circuit_integre", "name": "Amplificateur opérationnel", "role": "Amplifie le signal", "visual_notes": "Circuit intégré traversant, marquage de référence lisible."},
-    {"id": "C2", "x": 530, "y": 280, "type": "condensateur", "name": "Condensateur de sortie", "role": "Couple le signal vers la sortie", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
-    {"id": "PS1", "x": 70, "y": 280, "type": "module", "name": "Alimentation", "role": "Fournit le rail d'alimentation", "visual_notes": "Module d'alimentation, marquage de référence lisible."}
+    {"id": "C1", "x": 185, "y": 280, "type": "condensateur", "name": "Input capacitor", "role": "Couples the input signal", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."},
+    {"id": "R1", "x": 300, "y": 280, "type": "resistance", "name": "Bias network", "role": "Establishes the bias reference", "visual_notes": "Through-hole resistor network, legible reference marking."},
+    {"id": "U1", "x": 415, "y": 280, "type": "circuit_integre", "name": "Operational amplifier", "role": "Amplifies the signal", "visual_notes": "Through-hole integrated circuit, legible reference marking."},
+    {"id": "C2", "x": 530, "y": 280, "type": "condensateur", "name": "Output capacitor", "role": "Couples the signal to the output", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."},
+    {"id": "PS1", "x": 70, "y": 280, "type": "module", "name": "Power supply", "role": "Provides the supply rail", "visual_notes": "Power supply module, legible reference marking."}
   ],
   "liaisons": [
     ["TP1", "TP2"],
@@ -67,6 +67,6 @@
       "TP5": [0.0, 0.3, "weak"]
     }
   },
-  "nominal": "Fiche technique du constructeur, fonctionnement normal : TP1 : 9.0 V DC, 0.0 Vpp, silent ; TP2 : 4.5 V DC, 0.0 Vpp, silent ; TP3 : 4.5 V DC, 0.2 Vpp, clean ; TP4 : 4.5 V DC, 2.0 Vpp, clean ; TP5 : 0.0 V DC, 2.0 Vpp, clean.",
-  "symptom": "La sortie audio ne sonne pas normalement."
+  "nominal": "Manufacturer datasheet, normal operation: TP1: 9.0 V DC, 0.0 Vpp, silent; TP2: 4.5 V DC, 0.0 Vpp, silent; TP3: 4.5 V DC, 0.2 Vpp, clean; TP4: 4.5 V DC, 2.0 Vpp, clean; TP5: 0.0 V DC, 2.0 Vpp, clean.",
+  "symptom": "The audio output does not sound right."
 }

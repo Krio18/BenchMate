@@ -119,7 +119,7 @@ function bulle(t, ancre) {
   const val = b.querySelector(".val");
   if (m.type === "signal") { val.textContent = m.valeur; const q = document.createElement("span"); q.className = "q"; q.textContent = m.q; val.append(q); }
   else val.textContent = m.texte;
-  b.querySelector(".att").textContent = m.attendu ? "attendu " + m.attendu : m.role || "";
+  b.querySelector(".att").textContent = m.attendu ? "expected " + m.attendu : m.role || "";
   if (m.type === "signal") { const cv = document.createElement("canvas"); cv.width = 312; cv.height = 100; b.append(cv); }
   el.append(b);
   const o = new BM.scene.L.CSS2DObject(el); o.position.copy(ancre); o.center.set(1, 1); racine.add(o);

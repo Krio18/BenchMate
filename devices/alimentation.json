@@ -1,19 +1,19 @@
 {
-  "name": "une alimentation stabilisée fictive",
-  "chain": "Le circuit est une alimentation stabilisée fictive : le secteur entre par le pont redresseur D1, traverse le condensateur de filtrage C1 puis le régulateur U1, et ressort par le condensateur de sortie C2 vers la charge.",
+  "name": "a fictitious regulated power supply",
+  "chain": "The circuit is a fictitious regulated power supply: the mains enters through bridge rectifier D1, passes through filter capacitor C1 then regulator U1, and exits through output capacitor C2 to the load.",
   "points": [
-    {"id": "TP1", "x": 60, "y": 100, "name": "RECT_OUT", "description": "sortie du pont redresseur"},
-    {"id": "TP2", "x": 150, "y": 100, "name": "FILT_OUT", "description": "après le condensateur de filtrage"},
-    {"id": "TP3", "x": 240, "y": 100, "name": "REG_IN", "description": "entrée du régulateur"},
-    {"id": "TP4", "x": 330, "y": 100, "name": "REG_OUT", "description": "sortie du régulateur"},
-    {"id": "TP5", "x": 420, "y": 100, "name": "CAP_OUT", "description": "après le condensateur de sortie"},
-    {"id": "TP6", "x": 510, "y": 100, "name": "LOAD", "description": "aux bornes de la charge"}
+    {"id": "TP1", "x": 60, "y": 100, "name": "RECT_OUT", "description": "bridge rectifier output"},
+    {"id": "TP2", "x": 150, "y": 100, "name": "FILT_OUT", "description": "after the filter capacitor"},
+    {"id": "TP3", "x": 240, "y": 100, "name": "REG_IN", "description": "regulator input"},
+    {"id": "TP4", "x": 330, "y": 100, "name": "REG_OUT", "description": "regulator output"},
+    {"id": "TP5", "x": 420, "y": 100, "name": "CAP_OUT", "description": "after the output capacitor"},
+    {"id": "TP6", "x": 510, "y": 100, "name": "LOAD", "description": "across the load"}
   ],
   "components": [
-    {"id": "D1", "x": 105, "y": 280, "type": "diode", "name": "Pont redresseur", "role": "Redresse la tension alternative", "visual_notes": "Pont redresseur moulé, marquage de référence lisible."},
-    {"id": "C1", "x": 195, "y": 280, "type": "condensateur", "name": "Condensateur de filtrage", "role": "Lisse la tension redressée", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."},
-    {"id": "U1", "x": 330, "y": 280, "type": "circuit_integre", "name": "Régulateur", "role": "Fournit une tension de sortie stable à 5 V", "visual_notes": "Régulateur en boîtier standard, marquage de référence lisible."},
-    {"id": "C2", "x": 465, "y": 280, "type": "condensateur", "name": "Condensateur de sortie", "role": "Découple la sortie", "visual_notes": "Condensateur cylindrique traversant, marquage de référence lisible."}
+    {"id": "D1", "x": 105, "y": 280, "type": "diode", "name": "Bridge rectifier", "role": "Rectifies the AC voltage", "visual_notes": "Molded bridge rectifier, legible reference marking."},
+    {"id": "C1", "x": 195, "y": 280, "type": "condensateur", "name": "Filter capacitor", "role": "Smooths the rectified voltage", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."},
+    {"id": "U1", "x": 330, "y": 280, "type": "circuit_integre", "name": "Regulator", "role": "Provides a stable 5 V output voltage", "visual_notes": "Regulator in standard package, legible reference marking."},
+    {"id": "C2", "x": 465, "y": 280, "type": "condensateur", "name": "Output capacitor", "role": "Decouples the output", "visual_notes": "Through-hole cylindrical capacitor, legible reference marking."}
   ],
   "liaisons": [
     ["TP1", "TP2"],
@@ -72,6 +72,6 @@
       "TP6": [5.0, 0.18, "distorted"]
     }
   },
-  "nominal": "Fiche technique du constructeur, fonctionnement normal : TP1 : 11.5 V DC, 2.00 Vpp, clean ; TP2 : 12.0 V DC, 0.20 Vpp, clean ; TP3 : 12.0 V DC, 0.20 Vpp, clean ; TP4 : 5.00 V DC, 0.02 Vpp, clean ; TP5 : 5.00 V DC, 0.01 Vpp, clean ; TP6 : 5.00 V DC, 0.01 Vpp, clean. TP1 porte une ondulation élevée en fonctionnement normal, puisque c'est la sortie brute du pont redresseur.",
-  "symptom": "La tension de sortie n'est pas stable."
+  "nominal": "Manufacturer datasheet, normal operation: TP1: 11.5 V DC, 2.00 Vpp, clean; TP2: 12.0 V DC, 0.20 Vpp, clean; TP3: 12.0 V DC, 0.20 Vpp, clean; TP4: 5.00 V DC, 0.02 Vpp, clean; TP5: 5.00 V DC, 0.01 Vpp, clean; TP6: 5.00 V DC, 0.01 Vpp, clean. TP1 carries a high ripple in normal operation, since it is the raw output of the bridge rectifier.",
+  "symptom": "The output voltage is not stable."
 }

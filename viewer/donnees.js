@@ -4,8 +4,8 @@ window.BM = window.BM || {};
 const PREFIXES = [["FU", "fusible"], ["PS", "module"], ["RX", "module"], ["C", "condensateur"], ["R", "resistance"],
   ["Y", "quartz"], ["L", "inductance"],
   ["U", "circuit_integre"], ["Q", "transistor"], ["D", "diode"]];
-const QUALITE = {clean: "propre", distorted: "distordu", silent: "silencieux"};
-BM.OUTILS = {measure_voltage: "Tension DC", test_signal: "Signal", inspect_component: "Inspection"};
+const QUALITE = {clean: "clean", distorted: "distorted", silent: "silent"};
+BM.OUTILS = {measure_voltage: "DC voltage", test_signal: "Signal", inspect_component: "Inspection"};
 
 const lire = s => { if (s && typeof s === "object") return s; try { return JSON.parse(s); } catch { return null; } };
 const fr = s => (typeof s === "number" && Number.isInteger(s) ? s.toFixed(1) : String(s)).replace(".", ",");

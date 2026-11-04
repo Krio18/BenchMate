@@ -8,9 +8,9 @@ P.ICONES = {
   inspect_component: '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.3"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>',
   fin: '<svg viewBox="0 0 24 24"><path d="M5 21V4h12l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/></svg>'
 };
-const PHASES = {hypothese: "formule une hypothèse", mesure: "mesure", interprete: "interprète la mesure"};
-const ETATS = {suspect: "Suspect", seul: "Dernier suspect", ecarte: "Hypothèse écartée", fautif: "Diagnostiqué fautif", vrai: "Panne réelle",
-  ok: "Nominal", ko: "Anormal", info: "Mesuré"};
+const PHASES = {hypothese: "states a hypothesis", mesure: "measures", interprete: "interprets the measurement"};
+const ETATS = {suspect: "Suspect", seul: "Last suspect", ecarte: "Hypothesis ruled out", fautif: "Diagnosed faulty", vrai: "Actual fault",
+  ok: "Nominal", ko: "Abnormal", info: "Measured"};
 const VITESSE_LECTURE = 150; // caractères par seconde
 let D = null, segs = [], total = 0, vu = 0;
 
@@ -19,7 +19,7 @@ const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) 
 
 P.preparer = donnees => {
   D = donnees;
-  $("nomDispo").textContent = BM.majuscule(D.titre) || "Dispositif"; $("scen").textContent = "Scénario " + D.scenario; $("dispo").hidden = false;
+  $("nomDispo").textContent = BM.majuscule(D.titre) || "Device"; $("scen").textContent = "Scenario " + D.scenario; $("dispo").hidden = false;
   $("symptome").textContent = D.symptome || "—";
   const jet = $("jetons"); jet.replaceChildren();
   for (const c of D.composants) {
@@ -47,8 +47,8 @@ P.etape = (t, instant) => {
   tete.append(el("span", "nom", t.nomOutil), el("b", "cible", t.cible || "?"));
   const e = D.parId[t.cible]; if (e && e.name) tete.append(el("span", "sous", e.name));
   const mes = el("div", "e-mes"); mes.append(el("span", "val", m.texte));
-  if (m.attendu) mes.append(el("span", "att", "attendu " + m.attendu));
-  if (m.etat) mes.append(el("span", "pastille " + m.etat, m.etat === "ko" ? "anormal" : "nominal"));
+  if (m.attendu) mes.append(el("span", "att", "expected " + m.attendu));
+  if (m.etat) mes.append(el("span", "pastille " + m.etat, m.etat === "ko" ? "abnormal" : "nominal"));
   li.append(tete, mes);
   if (t.apres) { li.append(el("p", "e-pensee", t.apres)); li.onclick = () => li.classList.toggle("ouverte"); }
   const ol = $("etapes"); ol.querySelectorAll(".actuelle").forEach(x => x.classList.remove("actuelle"));
@@ -97,12 +97,12 @@ P.verdict = () => {
   $("soustitre").hidden = true;
   v.className = "verre " + (!D.diag ? "echec" : !D.vrai ? "" : juste ? "juste" : "faux");
   $("vId").textContent = D.diag || "∅";
-  $("vNom").textContent = c ? c.name || c.id : D.diag ? D.diag : "Aucun diagnostic";
-  $("vRole").textContent = c ? c.role || "" : "L'agent n'a pas conclu dans le budget de mesures.";
+  $("vNom").textContent = c ? c.name || c.id : D.diag ? D.diag : "No diagnosis";
+  $("vRole").textContent = c ? c.role || "" : "The agent did not conclude within the measurement budget.";
   $("vJust").textContent = D.justification; $("vJust").hidden = !D.justification;
-  $("vReel").textContent = !D.vrai ? "Panne réelle : inconnue" : (juste ? "✓ Panne réelle : " : "✗ Panne réelle : ") + D.vrai;
-  $("vMes").textContent = `${D.tours.length} mesure${D.tours.length > 1 ? "s" : ""}`;
-  $("vHyp").textContent = `${D.ids.size} hypothèses → ${D.diag ? 1 : 0}`;
+  $("vReel").textContent = !D.vrai ? "Actual fault: unknown" : (juste ? "✓ Actual fault: " : "✗ Actual fault: ") + D.vrai;
+  $("vMes").textContent = `${D.tours.length} measurement${D.tours.length > 1 ? "s" : ""}`;
+  $("vHyp").textContent = `${D.ids.size} hypotheses → ${D.diag ? 1 : 0}`;
   v.hidden = false; v.style.animation = "none"; void v.offsetWidth; v.style.animation = "";
   if (c) $("jt-" + D.diag)?.classList.replace("off", "fautif") || $("jt-" + D.diag)?.classList.add("fautif");
   if (D.vrai && !juste) $("jt-" + D.vrai)?.classList.replace("off", "vrai") || $("jt-" + D.vrai)?.classList.add("vrai");

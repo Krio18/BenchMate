@@ -107,7 +107,7 @@ function serigraphie(D, W, H, versMonde, vide) {
   }
   if (vide) {
     g.font = police(1.1, 800); g.fillStyle = "rgba(234,241,233,.12)"; g.fillText("BENCHMATE", c.width / 2, c.height / 2);
-    g.font = police(.24, 600); g.fillText("MUSE SPARK · BANC DE DIAGNOSTIC", c.width / 2, c.height / 2 + .9 * k);
+    g.font = police(.24, 600); g.fillText("MUSE SPARK · DIAGNOSIS BENCH", c.width / 2, c.height / 2 + .9 * k);
   } else {
     g.textAlign = "right"; g.font = police(.3, 800); g.fillText("BENCHMATE", c.width - .55 * k, c.height - .7 * k);
     g.font = police(.14, 600); g.fillText((D.titre || "").toUpperCase() + "  ·  REV 2026", c.width - .55 * k, c.height - .42 * k);

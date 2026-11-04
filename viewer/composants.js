@@ -114,7 +114,7 @@ const F = {
     const g = new THREE.Group(), lo = 1.4, la = 1, h = .42, y = .05 + h / 2;
     g.add(V(arrondie(lo, h, la, .05), M.anodise, 0, y, 0));
     for (let i = 0; i < 8; i++) g.add(V(boite(.035, .34, la * .86), M.alu, -.56 + i * .16, y + h / 2 + .17, 0));
-    const m = marquage([[c.id + "  ·  DC-DC", .42, .4], ["ENTRÉE 12 V — SORTIE 9 V", .26, .78]], lo * .8, .24, "rgba(225,232,242,.85)");
+    const m = marquage([[c.id + "  ·  DC-DC", .42, .4], ["INPUT 12 V — OUTPUT 9 V", .26, .78]], lo * .8, .24, "rgba(225,232,242,.85)");
     m.position.set(0, y - .02, la / 2 + .003); g.add(m);
     g.add(V(new THREE.SphereGeometry(.045, 16, 10), M.led, lo / 2 - .13, y + .12, la / 2 + .005));
     g.add(V(boite(.3, .26, .52), M.bornier, -lo / 2 - .16, .13, 0));

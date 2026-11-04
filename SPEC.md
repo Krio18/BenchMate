@@ -1,102 +1,102 @@
 # SPEC.md --- BenchMate 3D
 
-## 1. But et périmètre
+## 1. Goal and scope
 
-BenchMate 3D est une démo d'agent de diagnostic sur des circuits
-fictifs. L'agent inspecte des composants, demande des mesures,
-révise ses hypothèses et propose un diagnostic. Les circuits ne sont pas
-des simulations physiques : les résultats viennent exclusivement des
-tables des dispositifs.
+BenchMate 3D is a demo of a diagnostic agent on fictitious
+circuits. The agent inspects components, requests measurements,
+revises its hypotheses, and proposes a diagnosis. The circuits are not
+physical simulations: results come exclusively from the
+device tables.
 
-Chaque dispositif est un fichier de données (`devices/*.json`) : la
-chaîne, les points de mesure, les composants, la fiche nominale, le
-symptôme, les scénarios de panne et le budget d'appels. Le
-préamplificateur audio (§3 à §5) est le dispositif de référence ; les
-autres dispositifs suivent le même contrat avec leurs propres tables.
+Each device is a data file (`devices/*.json`): the
+chain, the measurement points, the components, the nominal datasheet,
+the symptom, the fault scenarios, and the call budget. The
+audio preamplifier (§3 to §5) is the reference device; the
+other devices follow the same contract with their own tables.
 
-Le scénario actif contient exactement une panne du dispositif actif.
-Le scénario sain est réservé aux tests.
+The active scenario contains exactly one fault of the active device.
+The healthy scenario is reserved for tests.
 
-## 2. Règle d'or
+## 2. Golden rule
 
-**Le simulateur est l'autorité ; le modèle n'invente aucune valeur.**
+**The simulator is the authority; the model invents no value.**
 
--   Toute tension, amplitude, qualité de signal et métadonnée provient
-    du simulateur.
--   Le modèle ne calcule ni ne devine aucune mesure ; il doit appeler
-    les outils contractuels.
--   Le simulateur renvoie les valeurs prédéfinies du scénario actif.
--   Un identifiant inconnu produit une erreur explicite, jamais une
-    valeur de remplacement.
--   Le scénario actif et l'identité de la panne restent cachés à
-    l'agent.
--   L'agent distingue les faits mesurés de ses hypothèses et justifie
-    son diagnostic par des résultats retournés par les outils.
+-   All voltages, amplitudes, signal qualities, and metadata come
+    from the simulator.
+-   The model neither computes nor guesses any measurement; it must call
+    the contractual tools.
+-   The simulator returns the predefined values of the active scenario.
+-   An unknown identifier produces an explicit error, never a
+    substitute value.
+-   The active scenario and the fault identity stay hidden from
+    the agent.
+-   The agent distinguishes measured facts from its hypotheses and
+    justifies its diagnosis with tool-returned results.
 
-## 3. Points de mesure
+## 3. Measurement points
 
-Tensions DC en volts (`V`), amplitudes de signal en volts crête-à-crête
-(`Vpp`). États autorisés : `clean`, `distorted`, `silent`, `weak`.
-Ci-dessous les points du dispositif de référence ; chaque dispositif
-définit les siens dans son fichier.
+DC voltages in volts (`V`), signal amplitudes in volts peak-to-peak
+(`Vpp`). Allowed states: `clean`, `distorted`, `silent`, `weak`.
+Below are the points of the reference device; each device
+defines its own in its file.
 
-  ID      Nom            Description
+  ID      Name           Description
   ------- -------------- --------------------------------------------
-  `TP1`   `SUPPLY_9V`    Rail d'alimentation
-  `TP2`   `BIAS_REF`     Référence de polarisation
-  `TP3`   `AMP_INPUT`    Entrée amplificateur
-  `TP4`   `AMP_OUTPUT`   Sortie amplificateur
-  `TP5`   `AUDIO_OUT`    Sortie audio après condensateur de liaison
+  `TP1`   `SUPPLY_9V`    Supply rail
+  `TP2`   `BIAS_REF`     Bias reference
+  `TP3`   `AMP_INPUT`    Amplifier input
+  `TP4`   `AMP_OUTPUT`   Amplifier output
+  `TP5`   `AUDIO_OUT`    Audio output after coupling capacitor
 
-## 4. Scénarios prédéfinis
+## 4. Predefined scenarios
 
-Dans les lignes ci-dessous, chaque valeur est
-`DC V / amplitude Vpp / qualité`, dans l'ordre
-`TP1, TP2, TP3, TP4, TP5`. Ces valeurs sont des données de
-démonstration, pas des spécifications de fabrication.
+In the rows below, each value is
+`DC V / amplitude Vpp / quality`, in order
+`TP1, TP2, TP3, TP4, TP5`. These values are demo
+data, not manufacturing specifications.
 
   -------------------------------------------------------------------------------------------------------------------
-  Scénario        TP1                TP2                TP3               TP4                   TP5
+  Scenario      TP1                TP2                TP3               TP4                   TP5
   --------------- ------------------ ------------------ ----------------- --------------------- ---------------------
-  Sain (tests     `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/2.0/clean`       `0.0/2.0/clean`
-  uniquement)                                                                                   
+  Healthy (tests `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/2.0/clean`       `0.0/2.0/clean`
+  only)
 
-  F1 ---          `5.2/0.0/silent`   `2.6/0.0/silent`   `2.6/0.2/clean`   `2.6/0.5/distorted`   `0.0/0.4/distorted`
-  alimentation                                                                                  
-  affaiblie                                                                                     
+  F1 ---         `5.2/0.0/silent`   `2.6/0.0/silent`   `2.6/0.2/clean`   `2.6/0.5/distorted`   `0.0/0.4/distorted`
+  weakened
+  supply
 
-  F2 --- réseau   `9.0/0.0/silent`   `0.1/0.0/silent`   `0.1/0.2/clean`   `0.1/0.1/silent`      `0.0/0.1/silent`
-  de polarisation                                                                               
-  ouvert                                                                                        
+  F2 --- open    `9.0/0.0/silent`   `0.1/0.0/silent`   `0.1/0.2/clean`   `0.1/0.1/silent`      `0.0/0.1/silent`
+  bias network
 
-  F3 --- étage    `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/0.2/distorted`   `0.0/0.2/distorted`
-  amplificateur                                                                                 
-  défaillant                                                                                    
+  F3 --- failing `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/0.2/distorted`   `0.0/0.2/distorted`
+  amplifier
+  stage
 
-  F4 ---          `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/2.0/clean`       `0.0/0.3/weak`
-  condensateur de                                                                               
-  sortie dégradé                                                                                
+  F4 ---         `9.0/0.0/silent`   `4.5/0.0/silent`   `4.5/0.2/clean`   `4.5/2.0/clean`       `0.0/0.3/weak`
+  degraded
+  output
+  capacitor
   -------------------------------------------------------------------------------------------------------------------
 
-Note : la colonne Sain sert aussi de fiche nominale fournie à l'agent ; les colonnes F1 à F4 et toute mention des pannes prédéfinies ou de leur nombre lui restent interdites. Chaque dispositif suit la même règle : seule sa fiche nominale (son scénario sain) est fournie à l'agent.
+Note: the Healthy column also serves as the nominal datasheet given to the agent; columns F1 to F4 and any mention of the predefined faults or their count are forbidden to it. Each device follows the same rule: only its nominal datasheet (its healthy scenario) is given to the agent.
 
-## 5. Composants inspectables
+## 5. Inspectable components
 
-L'inspection retourne uniquement des métadonnées statiques ; elle ne
-révèle jamais l'état de panne réel. Ci-dessous les composants du
-dispositif de référence.
+Inspection returns only static metadata; it never
+reveals the real fault state. Below are the components of the
+reference device.
 
-  ID      Nom                          Rôle
-  ------- ---------------------------- --------------------------------------
-  `C1`    Condensateur d'entrée        Couple le signal d'entrée
-  `R1`    Réseau de polarisation       Établit la référence de polarisation
-  `U1`    Amplificateur opérationnel   Amplifie le signal
-  `C2`    Condensateur de sortie       Couple le signal vers la sortie
-  `PS1`   Alimentation                 Fournit le rail d'alimentation
+  ID      Name                       Role
+  ------- -------------------------- --------------------------------------
+  `C1`    Input capacitor            Couples the input signal
+  `R1`    Bias network               Establishes the bias reference
+  `U1`    Operational amplifier      Amplifies the signal
+  `C2`    Output capacitor           Couples the signal to the output
+  `PS1`   Power supply               Provides the supply rail
 
-## 6. Trois outils autorisés : signatures exactes
+## 6. Three allowed tools: exact signatures
 
-Aucun outil supplémentaire ne doit être ajouté sans autorisation.
+No additional tool must be added without authorization.
 
 ### `inspect_component`
 
@@ -104,8 +104,8 @@ Aucun outil supplémentaire ne doit être ajouté sans autorisation.
 inspect_component(component_id: str) -> ComponentInfo
 ```
 
-`component_id` doit être un identifiant de composant du dispositif actif
-(`C1`, `R1`, `U1`, `C2` ou `PS1` pour le préamplificateur). Retour :
+`component_id` must be a component identifier of the active device
+(`C1`, `R1`, `U1`, `C2` or `PS1` for the preamplifier). Returns:
 
 ``` python
 {
@@ -116,8 +116,8 @@ inspect_component(component_id: str) -> ComponentInfo
 }
 ```
 
-`visual_notes` contient uniquement des informations statiques. Ne pas
-retourner `is_faulty`, la panne active ou un indice qui la révèle.
+`visual_notes` contains only static information. Do not
+return `is_faulty`, the active fault, or a hint revealing it.
 
 ### `measure_voltage`
 
@@ -125,8 +125,8 @@ retourner `is_faulty`, la panne active ou un indice qui la révèle.
 measure_voltage(point_id: str) -> VoltageReading
 ```
 
-`point_id` doit être un identifiant de point du dispositif actif
-(`TP1` à `TP5` pour le préamplificateur). Retour :
+`point_id` must be a point identifier of the active device
+(`TP1` to `TP5` for the preamplifier). Returns:
 
 ``` python
 {
@@ -136,7 +136,7 @@ measure_voltage(point_id: str) -> VoltageReading
 }
 ```
 
-`voltage_v` est lu directement dans la table du scénario actif.
+`voltage_v` is read directly from the active scenario table.
 
 ### `test_signal`
 
@@ -144,8 +144,8 @@ measure_voltage(point_id: str) -> VoltageReading
 test_signal(point_id: str) -> SignalReading
 ```
 
-`point_id` doit être un identifiant de point du dispositif actif
-(`TP1` à `TP5` pour le préamplificateur). Retour :
+`point_id` must be a point identifier of the active device
+(`TP1` to `TP5` for the preamplifier). Returns:
 
 ``` python
 {
@@ -155,14 +155,14 @@ test_signal(point_id: str) -> SignalReading
 }
 ```
 
-Amplitude et qualité sont lues directement dans la table du scénario
-actif.
+Amplitude and quality are read directly from the active scenario
+table.
 
-### Erreurs
+### Errors
 
-Un identifiant inconnu retourne une erreur structurée, sans correction
-silencieuse ni valeur par défaut. Utiliser `UNKNOWN_COMPONENT_ID` pour
-un composant invalide et `UNKNOWN_POINT_ID` pour un point invalide.
+An unknown identifier returns a structured error, with no silent
+correction or default value. Use `UNKNOWN_COMPONENT_ID` for
+an invalid component and `UNKNOWN_POINT_ID` for an invalid point.
 
 ``` python
 {
@@ -171,46 +171,46 @@ un composant invalide et `UNKNOWN_POINT_ID` pour un point invalide.
 }
 ```
 
-Les erreurs ne sont pas des mesures.
+Errors are not measurements.
 
-## 7. Boucle attendue de l'agent
+## 7. Expected agent loop
 
-1.  Symptôme rapporté, celui du dispositif actif, identique pour tous ses scénarios en panne (préamplificateur : « La sortie audio ne sonne pas normalement. »).
-2.  Présenter les causes possibles comme des hypothèses.
-3.  Choisir une inspection ou une mesure discriminante.
-4.  Appeler un outil et rapporter fidèlement son résultat.
-5.  Réviser les hypothèses à partir des observations.
-6.  Recommencer si une autre mesure est utile.
-7.  Donner le diagnostic le mieux étayé, les résultats qui le
-    soutiennent et un test de confirmation recommandé.
-8.  La boucle s’arrête quand l’agent nomme un composant, ou quand le budget d’appels est épuisé (8 par défaut, valeur `budget_appels` du dispositif sinon). L’arrêt forcé est journalisé comme un échec de diagnostic. Un seul outil est exécuté par tour ; un texte sans appel ni diagnostic provoque une relance neutre, hors budget.
+1.  Reported symptom, that of the active device, identical for all its fault scenarios (preamplifier: "The audio output does not sound right.").
+2.  Present the possible causes as hypotheses.
+3.  Choose a discriminating inspection or measurement.
+4.  Call one tool and faithfully report its result.
+5.  Revise the hypotheses from the observations.
+6.  Repeat if another measurement is useful.
+7.  Give the best-supported diagnosis, the results supporting it,
+    and a recommended confirmation test.
+8.  The loop stops when the agent names a component, or when the call budget is exhausted (8 by default, the device's `budget_appels` value otherwise). A forced stop is logged as a diagnosis failure. A single tool is executed per turn; text with neither a call nor a diagnosis triggers a neutral retry, outside the budget.
 
-L'agent ne prétend jamais avoir effectué un test sans appel d'outil et
-ne présente pas une hypothèse comme une certitude non étayée.
+The agent never claims to have run a test without a tool call and
+never presents a hypothesis as an unsupported certainty.
 
-La consigne système impose trois principes : propagation (une anomalie en amont rend l'aval anormal ; le fautif
-précède immédiatement la première anomalie), dichotomie (caractériser le symptôme à la sortie puis remonter par
-dichotomie sur la grandeur pertinente) et vérification des conditions de fonctionnement (alimentation et polarisation du suspect avant de l'accuser, même à symptôme purement signal).
+The system prompt imposes three principles: propagation (an upstream anomaly makes the downstream abnormal; the culprit
+immediately precedes the first anomaly), dichotomy (characterize the symptom at the output, then work back up by
+dichotomy on the relevant quantity), and operating-conditions check (supply and bias of the suspect before accusing it, even with a signal-only symptom).
 
-## 8. Journal de diagnostic vérifiable
-Le journal est un livrable obligatoire du MVP, pas une fonctionnalité facultative. Il doit permettre à une personne de vérifier comment l'agent est arrivé à son diagnostic. Chaque tour de diagnostic qui appelle un outil ajoute une entrée au journal contenant au minimum :
-- turn : numéro du tour, dans l'ordre chronologique ;
-- reasoning_before : texte de l'agent qui précède l'appel ;
-- tool : nom exact de l'outil appelé ;
-- argument : argument exact transmis à l'outil ;
-- value_received : valeur exacte retournée par l'outil, ou l'erreur structurée reçue ;
-- reasoning_after : texte de l'agent qui suit le résultat ;
-- remaining_hypotheses : hypothèses encore plausibles après prise en compte de ce résultat.
-Les valeurs journalisées doivent correspondre aux appels et retours réels, sans réécriture ni mesure ajoutée par le modèle. Les hypothèses restantes sont l'interprétation de l'agent et doivent rester distinctes des mesures factuelles. Le journal doit être consultable pendant la démonstration et permettre de retracer chaque étape du diagnostic. Ne pas journaliser l'identifiant secret du scénario actif ni une donnée qui le révèle directement.
+## 8. Verifiable diagnosis log
+The log is a mandatory MVP deliverable, not an optional feature. It must let a person verify how the agent reached its diagnosis. Each diagnosis turn that calls a tool adds a log entry containing at minimum:
+- turn: turn number, in chronological order;
+- reasoning_before: the agent text preceding the call;
+- tool: exact name of the tool called;
+- argument: exact argument passed to the tool;
+- value_received: exact value returned by the tool, or the structured error received;
+- reasoning_after: the agent text following the result;
+- remaining_hypotheses: hypotheses still plausible after taking this result into account.
+Logged values must match the actual calls and returns, with no rewriting and no measurement added by the model. Remaining hypotheses are the agent's interpretation and must stay distinct from factual measurements. The log must be viewable during the demonstration and allow tracing each step of the diagnosis. Do not log the secret active-scenario identifier or any data directly revealing it.
 
-## 9. Critères d'acceptation
-- Chaque dispositif encode ses pannes et son scénario sain comme tables déterministes.
-- Les points et les trois outils de chaque dispositif respectent ce contrat.
-- Les identifiants invalides renvoient des erreurs explicites.
-- L'agent ne reçoit pas l'identité du scénario actif.
-- Le budget d'appels est celui du dispositif (`budget_appels`, défaut 8).
-- L'export JSON rejoue le passage sans simulateur ni API ; le viewer 3D ne lit que lui.
-- Toute fonction du simulateur a un test exécutable.
-- Chaque tour journalise l'outil appelé, son argument, la valeur exacte reçue et les hypothèses restantes après cette valeur.
-- Le journal est consultable pendant la démo et permet de vérifier la chaîne de diagnostic sans révéler le scénario secret.
-- La démo montre au moins deux mesures, une révision d'hypothèse et un diagnostic fondé sur les résultats des outils.
+## 9. Acceptance criteria
+- Each device encodes its faults and its healthy scenario as deterministic tables.
+- Each device's points and three tools honor this contract.
+- Invalid identifiers return explicit errors.
+- The agent does not receive the active scenario identity.
+- The call budget is the device's (`budget_appels`, default 8).
+- The JSON export replays the run with no simulator or API; the 3D viewer reads only it.
+- Every simulator function has an executable test.
+- Each turn logs the tool called, its argument, the exact value received, and the hypotheses remaining after that value.
+- The log is viewable during the demo and allows verifying the diagnosis chain without revealing the secret scenario.
+- The demo shows at least two measurements, one hypothesis revision, and a diagnosis grounded in the tool results.
